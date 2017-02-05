@@ -79,13 +79,7 @@ void calc_mandel(const int width, const int height, const double scale)
       px->r = iter;
       px->g = iter;
       px->b = iter;
-    }
-  }
-
-  for (int i = 0; i < height; i++) {
-    rgb_t *px = row_ptrs[i];
-    for (int j = 0; j < width; j++, px++) {
-      map_colour(px);
+	  map_colour(px);
     }
   }
 }
