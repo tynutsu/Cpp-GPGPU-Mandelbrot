@@ -34,15 +34,15 @@ void alloc_2d(const int width, const int height)
     row_ptrs[i] = row_ptrs[i-1] + width;
 }
 
+const uchar num_shades = 16;
+const rgb_t mapping[num_shades] =
+{ { 66,30,15 },{ 25,7,26 },{ 9,1,47 },{ 4,4,73 },{ 0,7,100 },
+{ 12,44,138 },{ 24,82,177 },{ 57,125,209 },{ 134,181,229 },{ 211,236,248 },
+{ 241,233,191 },{ 248,201,95 },{ 255,170,0 },{ 204,128,0 },{ 153,87,0 },
+{ 106,52,3 } };
+
 void map_colour(rgb_t * const px) 
 {
-  const uchar num_shades = 16;
-  const rgb_t mapping[num_shades] =
-    {{66,30,15},   {25,7,26},    {9,1,47},     {4,4,73},     {0,7,100},
-     {12,44,138},  {24,82,177},  {57,125,209}, {134,181,229},{211,236,248},
-     {241,233,191},{248,201,95}, {255,170,0},  {204,128,0},  {153,87,0},
-     {106,52,3}};
-
   if (px->r == max_iter || px->r == 0) {
     px->r = 0; px->g = 0; px->b = 0;
   } else {
@@ -79,7 +79,13 @@ void calc_mandel(const int width, const int height, const double scale)
       px->r = iter;
       px->g = iter;
       px->b = iter;
-	  map_colour(px);
+    }
+  }
+
+  for (int i = 0; i < height; i++) {
+    rgb_t *px = row_ptrs[i];
+    for (int j = 0; j < width; j++, px++) {
+      map_colour(px);
     }
   }
 }
