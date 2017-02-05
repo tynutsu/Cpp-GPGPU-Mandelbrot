@@ -75,17 +75,12 @@ void calc_mandel(const int width, const int height, const double scale)
         zx2 = zx * zx;
         zy2 = zy * zy;
       } while (iter++ < max_iter && zx2 + zy2 < 4);
-
-      px->r = iter;
-      px->g = iter;
-      px->b = iter;
-    }
-  }
-
-  for (int i = 0; i < height; i++) {
-    rgb_t *px = row_ptrs[i];
-    for (int j = 0; j < width; j++, px++) {
-      map_colour(px);
+	  if (iter == max_iter || iter == 0) {
+		  px->r = 0; px->g = 0; px->b = 0;
+	  }
+	  else {
+		  *px = mapping[iter % num_shades];
+	  }
     }
   }
 }
