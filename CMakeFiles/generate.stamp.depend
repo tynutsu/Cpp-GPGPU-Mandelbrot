@@ -19,3 +19,9 @@ C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/Compiler/MSVC-CXX.cmake
 C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/Platform/Windows-MSVC-CXX.cmake
 C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/Platform/Windows-MSVC.cmake
 C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/CMakeCommonLanguageInclude.cmake
+C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/FindCUDA.cmake
+C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/FindPackageHandleStandardArgs.cmake
+C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/FindPackageMessage.cmake
+C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/CMakeParseArguments.cmake
+C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/gpu.dir/gpu_generated_gpu.cu.obj.depend
+C:/Program Files (x86)/CMake/share/cmake-3.4/Modules/FindCUDA/run_nvcc.cmake

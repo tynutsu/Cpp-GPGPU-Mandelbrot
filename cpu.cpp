@@ -8,26 +8,26 @@
 using uchar = unsigned char;
 using namespace std::chrono;
 const double cx = -.6, cy = 0;
-const uchar max_iter = std::numeric_limits<uchar>::max();
+const uchar maxit = std::numeric_limits<uchar>::max();
 
-struct rgb_t { unsigned char r, g, b; };
+struct Pixel { unsigned char r, g, b; };
 
-rgb_t **row_ptrs;
-rgb_t  *img_data;
+Pixel **row_ptrs;
+Pixel  *img_data;
  
 void screen_dump(const int width, const int height)
 {
-  FILE *fp = fopen("out_mandelbrot.ppm", "w");
+  FILE *fp = fopen("cpuOutput.ppm", "w");
   fprintf(fp, "P6\n%d %d\n255\n", width, height);
   for (int i = height - 1; i >= 0; i--)
-    fwrite(row_ptrs[i], 1, width * sizeof(rgb_t), fp);
+    fwrite(row_ptrs[i], 1, width * sizeof(Pixel), fp);
   fclose(fp);
 }
  
 void alloc_2d(const int width, const int height)
 {
-  img_data = new rgb_t[width * height];
-  row_ptrs = new rgb_t*[height];
+  img_data = new Pixel[width * height];
+  row_ptrs = new Pixel*[height];
 
   row_ptrs[0] = img_data;
   for (int i = 1; i < height; i++)
@@ -35,19 +35,19 @@ void alloc_2d(const int width, const int height)
 }
 
 const uchar num_shades = 16;
-const rgb_t mapping[num_shades] =
+const Pixel shades[num_shades] =
 { { 66,30,15 },{ 25,7,26 },{ 9,1,47 },{ 4,4,73 },{ 0,7,100 },
 { 12,44,138 },{ 24,82,177 },{ 57,125,209 },{ 134,181,229 },{ 211,236,248 },
 { 241,233,191 },{ 248,201,95 },{ 255,170,0 },{ 204,128,0 },{ 153,87,0 },
 { 106,52,3 } };
 
-void map_colour(rgb_t * const px) 
+void map_colour(Pixel * const px) 
 {
-  if (px->r == max_iter || px->r == 0) {
+  if (px->r == maxit || px->r == 0) {
     px->r = 0; px->g = 0; px->b = 0;
   } else {
     const uchar uc = px->r % num_shades;
-    *px = mapping[uc];
+    *px = shades[uc];
   }
 }
  
@@ -57,7 +57,7 @@ void calc_mandel(const int width, const int height, const double scale)
 
     const double y = (i - height/2) * scale + cy;
 
-    rgb_t *px = row_ptrs[i];
+    Pixel *px = row_ptrs[i];
     for (int j = 0; j  < width; j++, px++) {
 
       const double x = (j - width/2) * scale + cx;
@@ -65,8 +65,8 @@ void calc_mandel(const int width, const int height, const double scale)
       uchar iter = 0;
  
       zx = hypot(x - .25, y);
-      if (x < zx - 2 * zx * zx + .25)     iter = max_iter;
-      if ((x + 1)*(x + 1) + y * y < 1/16) iter = max_iter;
+      if (x < zx - 2 * zx * zx + .25)     iter = maxit;
+      if ((x + 1)*(x + 1) + y * y < 1/16) iter = maxit;
  
       zx = zy = zx2 = zy2 = 0;
       do {
@@ -74,12 +74,12 @@ void calc_mandel(const int width, const int height, const double scale)
         zx = zx2 - zy2 + x;
         zx2 = zx * zx;
         zy2 = zy * zy;
-      } while (iter++ < max_iter && zx2 + zy2 < 4);
-	  if (iter == max_iter || iter == 0) {
+      } while (iter++ < maxit && zx2 + zy2 < 4);
+	  if (iter == maxit || iter == 0) {
 		  px->r = 0; px->g = 0; px->b = 0;
 	  }
 	  else {
-		  *px = mapping[iter % num_shades];
+		  *px = shades[iter % num_shades];
 	  }
     }
   }

@@ -4,6 +4,8 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cpu", "cpu.vcxproj", "{EED5DBE1-8F05-3C7C-82AB-1D982112E008}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gpu", "gpu.vcxproj", "{64E1D2AE-74C4-3F26-B9D4-C589E51D95C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -20,6 +22,14 @@ Global
 		{EED5DBE1-8F05-3C7C-82AB-1D982112E008}.Release|Win32.Build.0 = Release|Win32
 		{EED5DBE1-8F05-3C7C-82AB-1D982112E008}.RelWithDebInfo|Win32.ActiveCfg = RelWithDebInfo|Win32
 		{EED5DBE1-8F05-3C7C-82AB-1D982112E008}.RelWithDebInfo|Win32.Build.0 = RelWithDebInfo|Win32
+		{64E1D2AE-74C4-3F26-B9D4-C589E51D95C2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{64E1D2AE-74C4-3F26-B9D4-C589E51D95C2}.Debug|Win32.Build.0 = Debug|Win32
+		{64E1D2AE-74C4-3F26-B9D4-C589E51D95C2}.MinSizeRel|Win32.ActiveCfg = MinSizeRel|Win32
+		{64E1D2AE-74C4-3F26-B9D4-C589E51D95C2}.MinSizeRel|Win32.Build.0 = MinSizeRel|Win32
+		{64E1D2AE-74C4-3F26-B9D4-C589E51D95C2}.Release|Win32.ActiveCfg = Release|Win32
+		{64E1D2AE-74C4-3F26-B9D4-C589E51D95C2}.Release|Win32.Build.0 = Release|Win32
+		{64E1D2AE-74C4-3F26-B9D4-C589E51D95C2}.RelWithDebInfo|Win32.ActiveCfg = RelWithDebInfo|Win32
+		{64E1D2AE-74C4-3F26-B9D4-C589E51D95C2}.RelWithDebInfo|Win32.Build.0 = RelWithDebInfo|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
