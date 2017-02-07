@@ -6,8 +6,8 @@ struct Pixel { unsigned char r, g, b; };
 class MandelbrotSet
 {
 private:
-	Pixel *setOnHost;			// the Mandelbrot set on the host RAM
-	Pixel *setOnDevice;			// the Mandelbrot set on the device RAM
+	Pixel *setOnHost;			// the Mandelbrot set data on the host RAM
+	Pixel *setOnDevice;			// the Mandelbrot set on data the device RAM
 
 	int width = 4096;
 	int height = 4096;

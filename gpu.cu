@@ -1,13 +1,10 @@
-#include <cstdio>
-#include <cstdlib>
 #include <cmath>
 #include <limits>
-#include <chrono>
+
 #include "MandelbrotSet.h"
 
 using uchar = unsigned char;
-using namespace std;
-using namespace chrono;
+
 
 #ifndef TOTAL_SHADES
 #define TOTAL_SHADES 16
@@ -40,7 +37,7 @@ __global__ void calc_mandel(Pixel  *img_data, const int width, const int height,
 	while ((x * x + y * y <= 4.0f) && (iter < maxit))
 	{
 		xtemp = x * x - y * y + x0;
-		y = 2.0f * x * y + y0;
+		y = 2 * x * y + y0;
 		x = xtemp;
 		iter++;
 	}
@@ -53,14 +50,13 @@ __global__ void calc_mandel(Pixel  *img_data, const int width, const int height,
 }
 
  
-void run(int width, int height, double scale, MandelbrotSet* set) {
+void process(MandelbrotSet* set, double scale) {
 	dim3 block_size(16, 16);
 	int w = set->getWidth();
 	int h = set->getHeight();
 	dim3 grid_size(w / block_size.x, h / block_size.y);	
 	calc_mandel << <grid_size, block_size >> >(set->getDeviceReference(), w, h, scale);
 	set->saveAs("testOutput.ppm");
-	
 }
 
 int main(int argc, char *argv[])
@@ -68,16 +64,12 @@ int main(int argc, char *argv[])
   const int width  = (argc > 1) ? std::atoi(argv[1]) : 4096;
   const int height = (argc > 2) ? std::atoi(argv[2]) : 4096;
   const double scale = 1. / (width / 4);
-  cout << endl << endl << endl << "Scale: " << scale << endl << endl << endl;
   set = new MandelbrotSet(width, height);
   for (int i = 0; i < 5; i++) {
-	  auto start = high_resolution_clock::now();
-	  run(width, height, scale, set);
-	  auto end = high_resolution_clock::now();
-	  auto elapsed = duration_cast<milliseconds> (end - start);
-	  std::cout << "Execution time: " << elapsed.count() << " miliseconds " << i << std::endl;
+	  cout << "Attempt [" << i << "] " << endl;
+	  measure(process, set, scale);
   }
   delete set;
-  std::cin.get();
+  //std::cin.get();
   return 0;
 }
