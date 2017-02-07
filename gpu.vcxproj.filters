@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <CustomBuild Include="C:\Users\b00243868\Desktop\default_GPGPU\gpu.cu" />
@@ -13,5 +13,13 @@
     <Filter Include="Object Files">
       <UniqueIdentifier>{DD5DEA60-3301-3D54-A2E9-E806EDC6BB85}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MandelbrotSet.cpp" />
+    <ClCompile Include="Util.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MandelbrotSet.h" />
+    <ClInclude Include="Util.h" />
   </ItemGroup>
 </Project>
