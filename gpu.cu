@@ -36,13 +36,13 @@ __global__ void calc_mandel(Pixel  *data, const int width, const int height, con
 	float y = 0.0f;
 	int iter = 0;
 	float xtemp;
-	while ((x * x + y * y <= 4.0f) && (iter < maxit))
+	do
 	{
 		xtemp = x * x - y * y + x0;
 		y = 2 * x * y + y0;
 		x = xtemp;
 		iter++;
-	}
+	} while ((x * x + y * y <= 4.0f) && (iter < maxit));
 	if (iter == maxit || iter == 0) {
 		data[index].r = 0; data[index].g = 0; data[index].b = 0;
 	}
