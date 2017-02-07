@@ -1,8 +1,6 @@
 #pragma once
 #include "Util.h"
 
-struct Pixel { unsigned char r, g, b; };
-
 class MandelbrotSet
 {
 private:

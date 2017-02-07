@@ -1,33 +1,35 @@
 #include <cmath>
-#include <limits>
-
 #include "MandelbrotSet.h"
-
-using uchar = unsigned char;
-
-
-#ifndef TOTAL_SHADES
-#define TOTAL_SHADES 16
-#endif
-
-const uchar maxit = std::numeric_limits<uchar>::max();
 
 MandelbrotSet *set;
 
 struct Complex { double x, y; };
 
-__constant__ Pixel shades[TOTAL_SHADES] =
-{ { 66,30,15 },{ 25,7,26 },{ 9,1,47 },{ 4,4,73 },{ 0,7,100 },
-{ 12,44,138 },{ 24,82,177 },{ 57,125,209 },{ 134,181,229 },{ 211,236,248 },
-{ 241,233,191 },{ 248,201,95 },{ 255,170,0 },{ 204,128,0 },{ 153,87,0 },
-{ 106,52,3 } };
+__constant__ Pixel shades[TOTAL_SHADES] = {
+	{ 66,30,15 },
+	{ 25,7,26 },
+	{ 9,1,47 },
+	{ 4,4,73 },
+	{ 0,7,100 },
+	{ 12,44,138 },
+	{ 24,82,177 },
+	{ 57,125,209 },
+	{ 134,181,229 },
+	{ 211,236,248 },
+	{ 241,233,191 },
+	{ 248,201,95 },
+	{ 255,170,0 },
+	{ 204,128,0 },
+	{ 153,87,0 },
+	{ 106,52,3 }
+};
 
-__global__ void calc_mandel(Pixel  *img_data, const int width, const int height, const double scale)
+__global__ void calc_mandel(Pixel  *data, const int width, const int height, const double scale)
 {
 	int row = blockIdx.y * blockDim.y + threadIdx.y;
-	int col = blockIdx.x * blockDim.x + threadIdx.x;
-	int index = row * width + col;
-	float x0 = ((float)col / width) * 3.5f - 2.5f;
+	int column = blockIdx.x * blockDim.x + threadIdx.x;
+	int index = row * width + column;
+	float x0 = ((float)column / width) * 3.5f - 2.5f;
 	float y0 = ((float)row / height) * 3.5f - 1.75f;
 
 	float x = 0.0f;
@@ -42,10 +44,10 @@ __global__ void calc_mandel(Pixel  *img_data, const int width, const int height,
 		iter++;
 	}
 	if (iter == maxit || iter == 0) {
-		img_data[index].r = 0; img_data[index].g = 0; img_data[index].b = 0;
+		data[index].r = 0; data[index].g = 0; data[index].b = 0;
 	}
 	else {
-		img_data[index] = shades[iter % TOTAL_SHADES];
+		data[index] = shades[iter % TOTAL_SHADES];
 	}	
 }
 

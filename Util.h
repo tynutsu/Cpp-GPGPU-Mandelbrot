@@ -3,9 +3,19 @@
 #include <cuda_runtime.h>
 #include <string>
 #include <chrono>
+#include <limits>
+
+#ifndef TOTAL_SHADES
+#define TOTAL_SHADES 16
+#endif
+
+struct Pixel { unsigned char r, g, b; };
 
 using namespace std;
 using namespace chrono;
+
+const unsigned char maxit = std::numeric_limits<unsigned char>::max();
+
 
 /*
 	method used to personalise the cuda error message or to log successful execution
