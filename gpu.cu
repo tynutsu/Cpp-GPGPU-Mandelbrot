@@ -29,8 +29,8 @@ __global__ void calc_mandel(Pixel  *data, const int width, const int height, con
 	int row = blockIdx.y * blockDim.y + threadIdx.y;
 	int column = blockIdx.x * blockDim.x + threadIdx.x;
 	int index = row * width + column;
-	float x0 = ((float)column / width) * 3.5f - 2.5f;
-	float y0 = ((float)row / height) * 3.5f - 1.75f;
+	float x0 = (column - width/2) * scale - 0.6f;
+	float y0 = (row - height/2) * scale + 0.0f;
 
 	float x = 0.0f;
 	float y = 0.0f;
