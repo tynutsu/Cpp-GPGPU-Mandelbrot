@@ -9,7 +9,7 @@ The output was:
 Microsoft (R) Build Engine version 14.0.23107.0
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-Build started 07/02/2017 16:36:32.
+Build started 10/02/2017 20:06:05.
 Project "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\3.4.2\CompilerIdC\CompilerIdC.vcxproj" on node 1 (default targets).
 PrepareForBuild:
   Creating directory "Debug\".
@@ -35,7 +35,7 @@ Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:00.54
+Time Elapsed 00:00:00.59
 
 
 Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
@@ -54,7 +54,7 @@ The output was:
 Microsoft (R) Build Engine version 14.0.23107.0
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-Build started 07/02/2017 16:36:33.
+Build started 10/02/2017 20:06:06.
 Project "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\3.4.2\CompilerIdCXX\CompilerIdCXX.vcxproj" on node 1 (default targets).
 PrepareForBuild:
   Creating directory "Debug\".
@@ -80,7 +80,7 @@ Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:00.49
+Time Elapsed 00:00:00.51
 
 
 Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
@@ -92,153 +92,153 @@ The CXX compiler identification is MSVC, found in "C:/Users/b00243868/Desktop/de
 Determining if the C compiler works passed with the following output:
 Change Dir: C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/CMakeTmp
 
-Run Build Command:"C:/Program Files (x86)/MSBuild/14.0/bin/MSBuild.exe" "cmTC_c4999.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=14.0"
+Run Build Command:"C:/Program Files (x86)/MSBuild/14.0/bin/MSBuild.exe" "cmTC_25e62.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=14.0"
 Microsoft (R) Build Engine version 14.0.23107.0
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-Build started 07/02/2017 16:36:34.
-Project "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\cmTC_c4999.vcxproj" on node 1 (default targets).
+Build started 10/02/2017 20:06:07.
+Project "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\cmTC_25e62.vcxproj" on node 1 (default targets).
 PrepareForBuild:
-  Creating directory "cmTC_c4999.dir\Debug\".
+  Creating directory "cmTC_25e62.dir\Debug\".
   Creating directory "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\Debug\".
-  Creating directory "cmTC_c4999.dir\Debug\cmTC_c4999.tlog\".
+  Creating directory "cmTC_25e62.dir\Debug\cmTC_25e62.tlog\".
 InitializeBuildStatus:
-  Creating "cmTC_c4999.dir\Debug\cmTC_c4999.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+  Creating "cmTC_25e62.dir\Debug\cmTC_25e62.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
-  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_c4999.dir\Debug\\" /Fd"cmTC_c4999.dir\Debug\vc140.pdb" /Gd /TC /analyze- /errorReport:queue C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\testCCompiler.c
-  testCCompiler.c
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_25e62.dir\Debug\\" /Fd"cmTC_25e62.dir\Debug\vc140.pdb" /Gd /TC /analyze- /errorReport:queue C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\testCCompiler.c
   Microsoft (R) C/C++ Optimizing Compiler Version 19.00.23026 for x86
   Copyright (C) Microsoft Corporation.  All rights reserved.
   
-  cl /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_c4999.dir\Debug\\" /Fd"cmTC_c4999.dir\Debug\vc140.pdb" /Gd /TC /analyze- /errorReport:queue C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\testCCompiler.c
+  cl /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_25e62.dir\Debug\\" /Fd"cmTC_25e62.dir\Debug\vc140.pdb" /Gd /TC /analyze- /errorReport:queue C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\testCCompiler.c
   
+  testCCompiler.c
 Link:
-  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\Debug\cmTC_c4999.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/CMakeTmp/Debug/cmTC_c4999.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/CMakeTmp/Debug/cmTC_c4999.lib" /MACHINE:X86 /SAFESEH  /machine:X86 /debug cmTC_c4999.dir\Debug\testCCompiler.obj
-  cmTC_c4999.vcxproj -> C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\Debug\cmTC_c4999.exe
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\Debug\cmTC_25e62.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/CMakeTmp/Debug/cmTC_25e62.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/CMakeTmp/Debug/cmTC_25e62.lib" /MACHINE:X86 /SAFESEH  /machine:X86 /debug cmTC_25e62.dir\Debug\testCCompiler.obj
+  cmTC_25e62.vcxproj -> C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\Debug\cmTC_25e62.exe
 FinalizeBuildStatus:
-  Deleting file "cmTC_c4999.dir\Debug\cmTC_c4999.tlog\unsuccessfulbuild".
-  Touching "cmTC_c4999.dir\Debug\cmTC_c4999.tlog\cmTC_c4999.lastbuildstate".
-Done Building Project "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\cmTC_c4999.vcxproj" (default targets).
+  Deleting file "cmTC_25e62.dir\Debug\cmTC_25e62.tlog\unsuccessfulbuild".
+  Touching "cmTC_25e62.dir\Debug\cmTC_25e62.tlog\cmTC_25e62.lastbuildstate".
+Done Building Project "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\cmTC_25e62.vcxproj" (default targets).
 
 Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:00.62
+Time Elapsed 00:00:00.68
 
 
 Detecting C compiler ABI info compiled with the following output:
 Change Dir: C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/CMakeTmp
 
-Run Build Command:"C:/Program Files (x86)/MSBuild/14.0/bin/MSBuild.exe" "cmTC_53cd1.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=14.0"
+Run Build Command:"C:/Program Files (x86)/MSBuild/14.0/bin/MSBuild.exe" "cmTC_7fb1f.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=14.0"
 Microsoft (R) Build Engine version 14.0.23107.0
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-Build started 07/02/2017 16:36:34.
-Project "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\cmTC_53cd1.vcxproj" on node 1 (default targets).
+Build started 10/02/2017 20:06:08.
+Project "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\cmTC_7fb1f.vcxproj" on node 1 (default targets).
 PrepareForBuild:
-  Creating directory "cmTC_53cd1.dir\Debug\".
+  Creating directory "cmTC_7fb1f.dir\Debug\".
   Creating directory "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\Debug\".
-  Creating directory "cmTC_53cd1.dir\Debug\cmTC_53cd1.tlog\".
+  Creating directory "cmTC_7fb1f.dir\Debug\cmTC_7fb1f.tlog\".
 InitializeBuildStatus:
-  Creating "cmTC_53cd1.dir\Debug\cmTC_53cd1.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+  Creating "cmTC_7fb1f.dir\Debug\cmTC_7fb1f.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
-  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_53cd1.dir\Debug\\" /Fd"cmTC_53cd1.dir\Debug\vc140.pdb" /Gd /TC /analyze- /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCCompilerABI.c"
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_7fb1f.dir\Debug\\" /Fd"cmTC_7fb1f.dir\Debug\vc140.pdb" /Gd /TC /analyze- /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCCompilerABI.c"
   Microsoft (R) C/C++ Optimizing Compiler Version 19.00.23026 for x86
   Copyright (C) Microsoft Corporation.  All rights reserved.
   
-  cl /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_53cd1.dir\Debug\\" /Fd"cmTC_53cd1.dir\Debug\vc140.pdb" /Gd /TC /analyze- /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCCompilerABI.c"
+  cl /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_7fb1f.dir\Debug\\" /Fd"cmTC_7fb1f.dir\Debug\vc140.pdb" /Gd /TC /analyze- /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCCompilerABI.c"
   
   CMakeCCompilerABI.c
 Link:
-  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\Debug\cmTC_53cd1.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/CMakeTmp/Debug/cmTC_53cd1.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/CMakeTmp/Debug/cmTC_53cd1.lib" /MACHINE:X86 /SAFESEH  /machine:X86 /debug cmTC_53cd1.dir\Debug\CMakeCCompilerABI.obj
-  cmTC_53cd1.vcxproj -> C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\Debug\cmTC_53cd1.exe
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\Debug\cmTC_7fb1f.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/CMakeTmp/Debug/cmTC_7fb1f.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/CMakeTmp/Debug/cmTC_7fb1f.lib" /MACHINE:X86 /SAFESEH  /machine:X86 /debug cmTC_7fb1f.dir\Debug\CMakeCCompilerABI.obj
+  cmTC_7fb1f.vcxproj -> C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\Debug\cmTC_7fb1f.exe
 FinalizeBuildStatus:
-  Deleting file "cmTC_53cd1.dir\Debug\cmTC_53cd1.tlog\unsuccessfulbuild".
-  Touching "cmTC_53cd1.dir\Debug\cmTC_53cd1.tlog\cmTC_53cd1.lastbuildstate".
-Done Building Project "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\cmTC_53cd1.vcxproj" (default targets).
+  Deleting file "cmTC_7fb1f.dir\Debug\cmTC_7fb1f.tlog\unsuccessfulbuild".
+  Touching "cmTC_7fb1f.dir\Debug\cmTC_7fb1f.tlog\cmTC_7fb1f.lastbuildstate".
+Done Building Project "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\cmTC_7fb1f.vcxproj" (default targets).
 
 Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:00.58
+Time Elapsed 00:00:00.89
 
 
 Determining if the CXX compiler works passed with the following output:
 Change Dir: C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/CMakeTmp
 
-Run Build Command:"C:/Program Files (x86)/MSBuild/14.0/bin/MSBuild.exe" "cmTC_50ab5.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=14.0"
+Run Build Command:"C:/Program Files (x86)/MSBuild/14.0/bin/MSBuild.exe" "cmTC_d1718.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=14.0"
 Microsoft (R) Build Engine version 14.0.23107.0
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-Build started 07/02/2017 16:36:35.
-Project "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\cmTC_50ab5.vcxproj" on node 1 (default targets).
+Build started 10/02/2017 20:06:09.
+Project "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\cmTC_d1718.vcxproj" on node 1 (default targets).
 PrepareForBuild:
-  Creating directory "cmTC_50ab5.dir\Debug\".
+  Creating directory "cmTC_d1718.dir\Debug\".
   Creating directory "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\Debug\".
-  Creating directory "cmTC_50ab5.dir\Debug\cmTC_50ab5.tlog\".
+  Creating directory "cmTC_d1718.dir\Debug\cmTC_d1718.tlog\".
 InitializeBuildStatus:
-  Creating "cmTC_50ab5.dir\Debug\cmTC_50ab5.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+  Creating "cmTC_d1718.dir\Debug\cmTC_d1718.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
-  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_50ab5.dir\Debug\\" /Fd"cmTC_50ab5.dir\Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:queue C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\testCXXCompiler.cxx
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_d1718.dir\Debug\\" /Fd"cmTC_d1718.dir\Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:queue C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\testCXXCompiler.cxx
   Microsoft (R) C/C++ Optimizing Compiler Version 19.00.23026 for x86
   Copyright (C) Microsoft Corporation.  All rights reserved.
   
-  cl /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_50ab5.dir\Debug\\" /Fd"cmTC_50ab5.dir\Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:queue C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\testCXXCompiler.cxx
-  
+  cl /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_d1718.dir\Debug\\" /Fd"cmTC_d1718.dir\Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:queue C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\testCXXCompiler.cxx
   testCXXCompiler.cxx
+  
 Link:
-  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\Debug\cmTC_50ab5.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/CMakeTmp/Debug/cmTC_50ab5.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/CMakeTmp/Debug/cmTC_50ab5.lib" /MACHINE:X86 /SAFESEH  /machine:X86 /debug cmTC_50ab5.dir\Debug\testCXXCompiler.obj
-  cmTC_50ab5.vcxproj -> C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\Debug\cmTC_50ab5.exe
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\Debug\cmTC_d1718.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/CMakeTmp/Debug/cmTC_d1718.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/CMakeTmp/Debug/cmTC_d1718.lib" /MACHINE:X86 /SAFESEH  /machine:X86 /debug cmTC_d1718.dir\Debug\testCXXCompiler.obj
+  cmTC_d1718.vcxproj -> C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\Debug\cmTC_d1718.exe
 FinalizeBuildStatus:
-  Deleting file "cmTC_50ab5.dir\Debug\cmTC_50ab5.tlog\unsuccessfulbuild".
-  Touching "cmTC_50ab5.dir\Debug\cmTC_50ab5.tlog\cmTC_50ab5.lastbuildstate".
-Done Building Project "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\cmTC_50ab5.vcxproj" (default targets).
+  Deleting file "cmTC_d1718.dir\Debug\cmTC_d1718.tlog\unsuccessfulbuild".
+  Touching "cmTC_d1718.dir\Debug\cmTC_d1718.tlog\cmTC_d1718.lastbuildstate".
+Done Building Project "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\cmTC_d1718.vcxproj" (default targets).
 
 Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:00.56
+Time Elapsed 00:00:00.60
 
 
 Detecting CXX compiler ABI info compiled with the following output:
 Change Dir: C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/CMakeTmp
 
-Run Build Command:"C:/Program Files (x86)/MSBuild/14.0/bin/MSBuild.exe" "cmTC_4323e.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=14.0"
+Run Build Command:"C:/Program Files (x86)/MSBuild/14.0/bin/MSBuild.exe" "cmTC_52b8c.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=14.0"
 Microsoft (R) Build Engine version 14.0.23107.0
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-Build started 07/02/2017 16:36:36.
-Project "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\cmTC_4323e.vcxproj" on node 1 (default targets).
+Build started 10/02/2017 20:06:10.
+Project "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\cmTC_52b8c.vcxproj" on node 1 (default targets).
 PrepareForBuild:
-  Creating directory "cmTC_4323e.dir\Debug\".
+  Creating directory "cmTC_52b8c.dir\Debug\".
   Creating directory "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\Debug\".
-  Creating directory "cmTC_4323e.dir\Debug\cmTC_4323e.tlog\".
+  Creating directory "cmTC_52b8c.dir\Debug\cmTC_52b8c.tlog\".
 InitializeBuildStatus:
-  Creating "cmTC_4323e.dir\Debug\cmTC_4323e.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+  Creating "cmTC_52b8c.dir\Debug\cmTC_52b8c.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
-  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_4323e.dir\Debug\\" /Fd"cmTC_4323e.dir\Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCXXCompilerABI.cpp"
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_52b8c.dir\Debug\\" /Fd"cmTC_52b8c.dir\Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCXXCompilerABI.cpp"
   Microsoft (R) C/C++ Optimizing Compiler Version 19.00.23026 for x86
   Copyright (C) Microsoft Corporation.  All rights reserved.
   
-  cl /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_4323e.dir\Debug\\" /Fd"cmTC_4323e.dir\Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCXXCompilerABI.cpp"
-  
+  cl /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_52b8c.dir\Debug\\" /Fd"cmTC_52b8c.dir\Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.4\Modules\CMakeCXXCompilerABI.cpp"
   CMakeCXXCompilerABI.cpp
+  
 Link:
-  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\Debug\cmTC_4323e.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/CMakeTmp/Debug/cmTC_4323e.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/CMakeTmp/Debug/cmTC_4323e.lib" /MACHINE:X86 /SAFESEH  /machine:X86 /debug cmTC_4323e.dir\Debug\CMakeCXXCompilerABI.obj
-  cmTC_4323e.vcxproj -> C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\Debug\cmTC_4323e.exe
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\Debug\cmTC_52b8c.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/CMakeTmp/Debug/cmTC_52b8c.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/CMakeTmp/Debug/cmTC_52b8c.lib" /MACHINE:X86 /SAFESEH  /machine:X86 /debug cmTC_52b8c.dir\Debug\CMakeCXXCompilerABI.obj
+  cmTC_52b8c.vcxproj -> C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\Debug\cmTC_52b8c.exe
 FinalizeBuildStatus:
-  Deleting file "cmTC_4323e.dir\Debug\cmTC_4323e.tlog\unsuccessfulbuild".
-  Touching "cmTC_4323e.dir\Debug\cmTC_4323e.tlog\cmTC_4323e.lastbuildstate".
-Done Building Project "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\cmTC_4323e.vcxproj" (default targets).
+  Deleting file "cmTC_52b8c.dir\Debug\cmTC_52b8c.tlog\unsuccessfulbuild".
+  Touching "cmTC_52b8c.dir\Debug\cmTC_52b8c.tlog\cmTC_52b8c.lastbuildstate".
+Done Building Project "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\cmTC_52b8c.vcxproj" (default targets).
 
 Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:00.55
+Time Elapsed 00:00:00.68
 
 
 
@@ -246,39 +246,39 @@ Time Elapsed 00:00:00.55
 Detecting CXX [] compiler features compiled with the following output:
 Change Dir: C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/CMakeTmp
 
-Run Build Command:"C:/Program Files (x86)/MSBuild/14.0/bin/MSBuild.exe" "cmTC_74a39.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=14.0"
+Run Build Command:"C:/Program Files (x86)/MSBuild/14.0/bin/MSBuild.exe" "cmTC_580f6.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=14.0"
 Microsoft (R) Build Engine version 14.0.23107.0
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-Build started 07/02/2017 16:36:37.
-Project "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\cmTC_74a39.vcxproj" on node 1 (default targets).
+Build started 10/02/2017 20:06:11.
+Project "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\cmTC_580f6.vcxproj" on node 1 (default targets).
 PrepareForBuild:
-  Creating directory "cmTC_74a39.dir\Debug\".
+  Creating directory "cmTC_580f6.dir\Debug\".
   Creating directory "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\Debug\".
-  Creating directory "cmTC_74a39.dir\Debug\cmTC_74a39.tlog\".
+  Creating directory "cmTC_580f6.dir\Debug\cmTC_580f6.tlog\".
 InitializeBuildStatus:
-  Creating "cmTC_74a39.dir\Debug\cmTC_74a39.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+  Creating "cmTC_580f6.dir\Debug\cmTC_580f6.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
-  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_74a39.dir\Debug\\" /Fd"cmTC_74a39.dir\Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:queue C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\feature_tests.cxx
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_580f6.dir\Debug\\" /Fd"cmTC_580f6.dir\Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:queue C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\feature_tests.cxx
   Microsoft (R) C/C++ Optimizing Compiler Version 19.00.23026 for x86
   Copyright (C) Microsoft Corporation.  All rights reserved.
   
-  cl /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_74a39.dir\Debug\\" /Fd"cmTC_74a39.dir\Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:queue C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\feature_tests.cxx
-  
+  cl /c /Zi /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_580f6.dir\Debug\\" /Fd"cmTC_580f6.dir\Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:queue C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\feature_tests.cxx
   feature_tests.cxx
+  
 Link:
-  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\Debug\cmTC_74a39.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/CMakeTmp/Debug/cmTC_74a39.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/CMakeTmp/Debug/cmTC_74a39.lib" /MACHINE:X86 /SAFESEH  /machine:X86 /debug cmTC_74a39.dir\Debug\feature_tests.obj
-  cmTC_74a39.vcxproj -> C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\Debug\cmTC_74a39.exe
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\Debug\cmTC_580f6.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/CMakeTmp/Debug/cmTC_580f6.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/b00243868/Desktop/default_GPGPU/CMakeFiles/CMakeTmp/Debug/cmTC_580f6.lib" /MACHINE:X86 /SAFESEH  /machine:X86 /debug cmTC_580f6.dir\Debug\feature_tests.obj
+  cmTC_580f6.vcxproj -> C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\Debug\cmTC_580f6.exe
 FinalizeBuildStatus:
-  Deleting file "cmTC_74a39.dir\Debug\cmTC_74a39.tlog\unsuccessfulbuild".
-  Touching "cmTC_74a39.dir\Debug\cmTC_74a39.tlog\cmTC_74a39.lastbuildstate".
-Done Building Project "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\cmTC_74a39.vcxproj" (default targets).
+  Deleting file "cmTC_580f6.dir\Debug\cmTC_580f6.tlog\unsuccessfulbuild".
+  Touching "cmTC_580f6.dir\Debug\cmTC_580f6.tlog\cmTC_580f6.lastbuildstate".
+Done Building Project "C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\CMakeTmp\cmTC_580f6.vcxproj" (default targets).
 
 Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:00.67
+Time Elapsed 00:00:00.59
 
 
     Feature record: CXX_FEATURE:1cxx_alias_templates

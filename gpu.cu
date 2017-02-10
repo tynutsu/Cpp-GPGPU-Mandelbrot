@@ -1,5 +1,6 @@
 #include <cmath>
 #include "MandelbrotSet.h"
+#include <iostream>
 #include <fstream>
 
 MandelbrotSet *set;
@@ -104,9 +105,16 @@ int main(int argc, char *argv[])
   double imaginary = (argc > 4) ? std::atol(argv[4]) : -0.0f;
   char* fileName = (argc > 5) ? argv[5] : "testOutput.ppm";
   const double scale = 4.0f / width;
-  string logName = to_string(width)+"x"+to_string(height)+"-log.csv";
-  fstream data(logName);
-  data << "Width, Height, Blocks, Threads, Time, Millis, Nanos";
+  string logName = "C:/Users/b00243868/Desktop/default_GPGPU/Debug/_"+to_string(width)+"x"+to_string(height)+"-log.csv";
+  const char* logFileName = logName.c_str();
+  fstream logFILE(logFileName, fstream::out);
+  if (logFILE.is_open()) {
+	  cout << "SUCCESS OPENING FILE";
+  }
+  else {
+	  cout << "CANNOT OPEN FILE " << logFileName;
+  }
+  logFILE << "Width, Height, Blocks, Threads, Millis, Nanos\n";
   set = new MandelbrotSet(width, height, { real, imaginary });
   long time = 0.0f;
   string unit = "";
@@ -118,7 +126,7 @@ int main(int argc, char *argv[])
 	  dim3 gridSize(width / threads, height / threads);
 	  time = 0.0f;
 	  for (int i = 0; i < CYCLES; i++) {
-		  data << width << "," << height << "," << width / threads << "," << threads << ",";
+		  logFILE << width << "," << height << "," << width / threads << "," << threads << ",";
 		  cout << "Attempt [" << i << "] " << gridSize.x << " blocks; " << blockSize.x << " threads: ";
 		  auto value = measure(process, set, scale, fileName, gridSize, blockSize);
 		  if (value.millis > NANOLIMIT) {
@@ -130,7 +138,7 @@ int main(int argc, char *argv[])
 			  time += value.nano;
 			  unit = "_nanoseconds_";
 		  }
-		  data << value.millis << value.nano << "\n";
+		  logFILE << value.millis << "," << value.nano << "\n";
 	  }
 	  cout << "Average time: " << time / CYCLES << endl;
 	  name.append(to_string(width) + "x" + to_string(height) + "_Blocks_" + to_string(width / threads) + "_Threads_" + to_string(threads) + unit + to_string(time / CYCLES) + ".ppm");
@@ -142,7 +150,7 @@ int main(int argc, char *argv[])
   dim3 blockSize(suggested.blockSize, suggested.blockSize);
   time = 0;
   for (int i = 0; i < CYCLES; i++) {
-	  data << width << "," << height << "," << suggested.gridSize << "," << suggested.blockSize << ",";
+	  logFILE << width << "," << height << "," << suggested.gridSize << "," << suggested.blockSize << ",";
 	  cout << "Attempt [" << i << "] " << gridSize.x << " blocks; " << blockSize.x << " threads: ";
 	  auto value = measure(process, set, scale, fileName, gridSize, blockSize);
 	  if (value.millis > NANOLIMIT) {
@@ -153,13 +161,13 @@ int main(int argc, char *argv[])
 		  time += value.nano;
 		  unit = "_nanoseconds_";
 	  }
-	  data << value.millis << value.nano << "RECOMMENDED\n";
+	  logFILE << value.millis << "," << value.nano << ",RECOMMENDED\n";
   }
   string name = "";
   name.append(to_string(width) + "x" + to_string(height) + "_Blocks_" + to_string(suggested.gridSize) + "_Threads_" + to_string(suggested.blockSize) + unit + to_string(time / CYCLES) + "___RECOMMENDED.ppm");
   cout << "\nRecommended settings: " << suggested.gridSize << " blocks, " << suggested.blockSize << " threads completed in " << time / CYCLES << " " << unit << endl;
   set->saveAs(name);
-  data.close();
+  logFILE.close();
 
   delete set;
   std::cin.get();

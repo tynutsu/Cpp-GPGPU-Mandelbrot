@@ -18,6 +18,7 @@ SET(CUDA_NVCC_DEPEND
  "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/eh.h"
  "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/emmintrin.h"
  "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/exception"
+ "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/fstream"
  "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/immintrin.h"
  "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/initializer_list"
  "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/intrin.h"
