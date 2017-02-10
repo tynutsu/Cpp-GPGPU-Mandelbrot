@@ -10,6 +10,7 @@
 #endif
 
 struct Pixel { unsigned char r, g, b; };
+struct Complex { double real, imaginary; };
 
 using namespace std;
 using namespace chrono;

@@ -5,9 +5,11 @@ MandelbrotSet::MandelbrotSet()
 	init();
 }
 
-MandelbrotSet::MandelbrotSet(int width, int height) {
+MandelbrotSet::MandelbrotSet(int width, int height, Complex number)
+{
 	this->width = width;
 	this->height = height;
+	this->complexNumber = number;
 	init();
 }
 
