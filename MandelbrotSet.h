@@ -15,7 +15,6 @@ private:
 
 public:
 	MandelbrotSet();
-	MandelbrotSet(int width, int height);
 	MandelbrotSet(int width, int height, Complex number);
 	~MandelbrotSet();
 
@@ -27,8 +26,8 @@ public:
 
 	void fetch();
 
-	inline void saveAs(char* fileName) {
-		FILE *fp = fopen(fileName, "w");
+	inline void saveAs(std::string fileName) {
+		FILE *fp = fopen(fileName.c_str(), "w");
 		fprintf(fp, "P6\n%d %d\n255\n", width, height);
 		for (int i = height - 1; i >= 0; i--) {
 			fwrite(setOnHost + i * width, 1, width * sizeof(Pixel), fp);

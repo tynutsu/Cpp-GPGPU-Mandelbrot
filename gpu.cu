@@ -54,25 +54,45 @@ __global__ void calc_mandel(Pixel  *data, const int width, const int height, con
 }
 
 void process(MandelbrotSet* set, double scale, char* fileName, dim3 blocks, dim3 threads) {
-	cudaEvent_t start, end;
-	cudaEventCreate(&start);
-	cudaEventCreate(&end);
 	int w = set->getWidth();
 	int h = set->getHeight();
 	Complex n = set->getComplex();
-	cudaEventRecord(start);
 	calc_mandel << <blocks, threads>> >(set->getDeviceReference(), w, h, scale, n);
 	set->fetch();
-	cudaEventSynchronize(end);
-	float miliseconds = 0;
-	cudaEventElapsedTime(&miliseconds, start, end);
-
-	cout << "CUDA MEASURE TIME: " << miliseconds << endl;
 }
 
-void calculateKernelLimits(int& blockSize, int& minGridSize, int& gridSize) {
+// using occupancy api from:
+// https://devblogs.nvidia.com/parallelforall/cuda-pro-tip-occupancy-api-simplifies-launch-configuration/
+KernelProperties calculateKernelLimits(int width, int height) {
+	int blockSize;   // The launch configurator returned block size
+	int minGridSize; // The minimum grid size needed to achieve the
+					 // maximum occupancy for a full device launch
+	int gridSize;    // The actual grid size needed, based on input size
 
+	cudaOccupancyMaxPotentialBlockSize(&minGridSize, &blockSize, calc_mandel, 0, 0);
+	// Round up according to array size
+
+	gridSize = (width + blockSize - 1) / blockSize;
+	printf("Grid size: %d; Block Size: %d\n", gridSize, blockSize);
+	// calculate theoretical occupancy
+	int maxActiveBlocks;
+	cudaOccupancyMaxActiveBlocksPerMultiprocessor(&maxActiveBlocks, calc_mandel, blockSize, 0);
+
+	int device;
+	cudaDeviceProp props;
+	printf("Max grid size: %d\n", props.maxGridSize);
+	printf("Max block size: %d\n", props.maxThreadsPerBlock);
+	printf("Max shared memory per block: %d\n", props.sharedMemPerBlock);
+	cudaGetDevice(&device);
+	cudaGetDeviceProperties(&props, device);
+
+	float occupancy = (maxActiveBlocks * blockSize / props.warpSize) / (float)(props.maxThreadsPerMultiProcessor / props.warpSize);
+
+	printf("Launched grid of size %d, with %d threads. Theoretical occupancy: %f\n", gridSize, blockSize, occupancy);
+	return{ gridSize, blockSize };
 }
+
+const int POWERS[13] = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096 };
 
 int main(int argc, char *argv[])
 {
@@ -82,18 +102,55 @@ int main(int argc, char *argv[])
   double imaginary = (argc > 4) ? std::atol(argv[4]) : -0.0f;
   char* fileName = (argc > 5) ? argv[5] : "testOutput.ppm";
   const double scale = 4.0f / width;
+
   set = new MandelbrotSet(width, height, { real, imaginary });
   long time = 0.0f;
-  int threads = 32;
-  dim3 blockSize(threads, threads);
-  //dim3 gridSize(64,64);
-  dim3 gridSize(width / threads, height / threads);
-  for (int i = 0; i < 5; i++) {
-	  cout << "Attempt [" << i << "] " << endl;
-	  time+= measure(process, set, scale, fileName, gridSize, blockSize);
+  string unit = "";
+
+  for (int power = 0; power < 13; power++) {
+	  int threads = POWERS[power];
+	  string name = "";
+	  dim3 blockSize(threads, threads);
+	  dim3 gridSize(width / threads, height / threads);
+	  time = 0.0f;
+	  for (int i = 0; i < CYCLES; i++) {
+		  cout << "Attempt [" << i << "] " << gridSize.x << " blocks; " << blockSize.x << " threads: ";
+		  auto value = measure(process, set, scale, fileName, gridSize, blockSize);
+		  if (value.millis > NANOLIMIT) {
+			  time += value.millis; 
+			  unit = "_milliseconds_";
+		  }
+		  else {
+			  time += value.nano;
+			  unit = "_nanoseconds_";
+		  }
+	  }
+	  cout << "Average time: " << time / CYCLES << endl;
+	  name.append(to_string(width) + "x" + to_string(height) + "_Blocks_" + to_string(width / threads) + "_Threads_" + to_string(threads) + unit + to_string(time / CYCLES) + ".ppm");
+	  cout << endl << "FILENAME IS: " << name << endl;
+	  set->saveAs(name);
   }
-  set->saveAs(fileName);
-  cout << "Done in: " << time / 5 << " milliseconds";
+  KernelProperties suggested = calculateKernelLimits(width, height);
+  dim3 gridSize(suggested.gridSize, suggested.gridSize);
+  dim3 blockSize(suggested.blockSize, suggested.blockSize);
+  time = 0;
+  for (int i = 0; i < CYCLES; i++) {
+	  cout << "Attempt [" << i << "] " << gridSize.x << " blocks; " << blockSize.x << " threads: ";
+	  auto value = measure(process, set, scale, fileName, gridSize, blockSize);
+	  if (value.millis > NANOLIMIT) {
+		  time += value.millis;
+		  unit = "_milliseconds_";
+	  }
+	  else {
+		  time += value.nano;
+		  unit = "_nanoseconds_";
+	  }
+  }
+  string name = "";
+  name.append(to_string(width) + "x" + to_string(height) + "_Blocks_" + to_string(suggested.gridSize) + "_Threads_" + to_string(suggested.blockSize) + unit + to_string(time / CYCLES) + "___RECOMMENDED.ppm");
+  cout << "\nRecommended settings: " << suggested.gridSize << " blocks, " << suggested.blockSize << " threads completed in " << time / CYCLES << " " << unit << endl;
+  set->saveAs(name);
+
   delete set;
   std::cin.get();
   return 0;
