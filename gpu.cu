@@ -27,19 +27,25 @@ __global__ void calc_mandel(Pixel  *data, const int width, const int height, con
 	int row = blockIdx.y * blockDim.y + threadIdx.y;
 	int column = blockIdx.x * blockDim.x + threadIdx.x;
 	int index = row * width + column;
-	float x0 = (column - width/2) * scale - 0.6f;
-	float y0 = (row - height/2) * scale + 0.0f;
-	float zx = 0.0f, zy = 0.0f, xx = 0.0f, yy = 0.0f;
+	float x = (column - width/2) * scale - 0.6f;
+	float y = (row - height/2) * scale + 0.0f;
+	float zx, zy, xx = x*x, yy = y*y;
 	unsigned char iter = 0;
+
+	zx = hypot(x - 0.25f, y);
+	if (x < zx - 2 * zx * zx + .25 || (x + 1)*(x + 1) + yy < 1 / 16) {
+		data[index].r = 0; data[index].g = 0; data[index].b = 0;
+		return;
+	}
+	zx = 0.0f; zy = 0.0f;
 	do
 	{
 		xx = zx * zx;
 		yy = zy * zy;
-		zy = 2 * zx * zy + y0;
-		zx = xx - yy + x0;;
-		iter++;
-	} while ((xx + yy <= 4.0f) && (iter < maxit));
-	if (iter == maxit || iter == 0) {
+		zy = 2 * zx * zy + y;
+		zx = xx - yy + x;;
+	} while ((xx + yy <= 4.0f) && (iter++ < MAXIT));
+	if (iter == MAXIT || iter == 0) {
 		data[index].r = 0; data[index].g = 0; data[index].b = 0;
 	}
 	else {
@@ -47,14 +53,25 @@ __global__ void calc_mandel(Pixel  *data, const int width, const int height, con
 	}	
 }
 
-void process(MandelbrotSet* set, double scale, char* fileName) {
-	dim3 block_size(16, 16);
+void process(MandelbrotSet* set, double scale, char* fileName, dim3 blocks, dim3 threads) {
+	cudaEvent_t start, end;
+	cudaEventCreate(&start);
+	cudaEventCreate(&end);
 	int w = set->getWidth();
 	int h = set->getHeight();
 	Complex n = set->getComplex();
-	dim3 grid_size(w / block_size.x, h / block_size.y);	
-	calc_mandel << <grid_size, block_size >> >(set->getDeviceReference(), w, h, scale, n);
-	set->saveAs(fileName);
+	cudaEventRecord(start);
+	calc_mandel << <blocks, threads>> >(set->getDeviceReference(), w, h, scale, n);
+	set->fetch();
+	cudaEventSynchronize(end);
+	float miliseconds = 0;
+	cudaEventElapsedTime(&miliseconds, start, end);
+
+	cout << "CUDA MEASURE TIME: " << miliseconds << endl;
+}
+
+void calculateKernelLimits(int& blockSize, int& minGridSize, int& gridSize) {
+
 }
 
 int main(int argc, char *argv[])
@@ -66,11 +83,18 @@ int main(int argc, char *argv[])
   char* fileName = (argc > 5) ? argv[5] : "testOutput.ppm";
   const double scale = 4.0f / width;
   set = new MandelbrotSet(width, height, { real, imaginary });
+  long time = 0.0f;
+  int threads = 32;
+  dim3 blockSize(threads, threads);
+  //dim3 gridSize(64,64);
+  dim3 gridSize(width / threads, height / threads);
   for (int i = 0; i < 5; i++) {
 	  cout << "Attempt [" << i << "] " << endl;
-	  measure(process, set, scale, fileName);
+	  time+= measure(process, set, scale, fileName, gridSize, blockSize);
   }
+  set->saveAs(fileName);
+  cout << "Done in: " << time / 5 << " milliseconds";
   delete set;
-  //std::cin.get();
+  std::cin.get();
   return 0;
 }

@@ -8,7 +8,7 @@
 using uchar = unsigned char;
 using namespace std::chrono;
 const double cx = -.6, cy = 0;
-const uchar maxit = std::numeric_limits<uchar>::max();
+const uchar MAXIT = std::numeric_limits<uchar>::max();
 
 struct Pixel { unsigned char r, g, b; };
 
@@ -43,7 +43,7 @@ const Pixel shades[num_shades] =
 
 void map_colour(Pixel * const px) 
 {
-  if (px->r == maxit || px->r == 0) {
+  if (px->r == MAXIT || px->r == 0) {
     px->r = 0; px->g = 0; px->b = 0;
   } else {
     const uchar uc = px->r % num_shades;
@@ -65,8 +65,8 @@ void calc_mandel(const int width, const int height, const double scale)
       uchar iter = 0;
  
       zx = hypot(x - .25, y);
-      if (x < zx - 2 * zx * zx + .25)     iter = maxit;
-      if ((x + 1)*(x + 1) + y * y < 1/16) iter = maxit;
+      if (x < zx - 2 * zx * zx + .25)     iter = MAXIT;
+      if ((x + 1)*(x + 1) + y * y < 1/16) iter = MAXIT;
  
       zx = zy = zx2 = zy2 = 0;
       do {
@@ -74,8 +74,8 @@ void calc_mandel(const int width, const int height, const double scale)
         zx = zx2 - zy2 + x;
         zx2 = zx * zx;
         zy2 = zy * zy;
-      } while (iter++ < maxit && zx2 + zy2 < 4);
-	  if (iter == maxit || iter == 0) {
+      } while (iter++ < MAXIT && zx2 + zy2 < 4);
+	  if (iter == MAXIT || iter == 0) {
 		  px->r = 0; px->g = 0; px->b = 0;
 	  }
 	  else {

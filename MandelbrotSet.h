@@ -28,8 +28,6 @@ public:
 	void fetch();
 
 	inline void saveAs(char* fileName) {
-		fetch();
-
 		FILE *fp = fopen(fileName, "w");
 		fprintf(fp, "P6\n%d %d\n255\n", width, height);
 		for (int i = height - 1; i >= 0; i--) {
