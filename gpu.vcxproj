@@ -403,11 +403,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <Object Include="C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\gpu.dir\$(Configuration)\gpu_generated_gpu.cu.obj" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="C:/Users/b00243868/Desktop/default_GPGPU/ZERO_CHECK.vcxproj">
-      <Project>0E5F777E-10BB-364E-8C3D-9DD4CF1231A5</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="CpuMandel.cpp" />
     <ClCompile Include="MandelbrotSet.cpp" />
     <ClCompile Include="Util.cpp" />
