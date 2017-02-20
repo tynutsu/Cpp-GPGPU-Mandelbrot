@@ -72,7 +72,7 @@ set(generated_cubin_file_internal "C:/Users/b00243868/Desktop/default_GPGPU/CMak
 set(CUDA_NVCC_EXECUTABLE "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v8.0/bin/nvcc.exe") # path
 set(CUDA_NVCC_FLAGS  ;; ) # list
 # Build specific configuration flags
-set(CUDA_NVCC_FLAGS_DEBUG  ; )
+set(CUDA_NVCC_FLAGS_DEBUG ;-Xptxas -v ; )
 set(CUDA_NVCC_FLAGS_RELEASE  ; )
 set(CUDA_NVCC_FLAGS_MINSIZEREL  ; )
 set(CUDA_NVCC_FLAGS_RELWITHDEBINFO  ; )

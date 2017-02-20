@@ -24,7 +24,4 @@
     <ClInclude Include="MandelbrotSet.h" />
     <ClInclude Include="Util.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="The Mandelbrot Set.docx" />
-  </ItemGroup>
 </Project>

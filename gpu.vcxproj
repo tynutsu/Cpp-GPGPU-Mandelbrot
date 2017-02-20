@@ -412,9 +412,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="MandelbrotSet.h" />
     <ClInclude Include="Util.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="The Mandelbrot Set.docx" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
