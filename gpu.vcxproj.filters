@@ -15,11 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CpuMandel.cpp" />
     <ClCompile Include="MandelbrotSet.cpp" />
     <ClCompile Include="Util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CpuMandel.h" />
     <ClInclude Include="MandelbrotSet.h" />
     <ClInclude Include="Util.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="The Mandelbrot Set.docx" />
   </ItemGroup>
 </Project>

@@ -1,9 +1,20 @@
-#include <cmath>
 #include "MandelbrotSet.h"
-#include <iostream>
-#include <fstream>
+#include "CpuMandel.h"
 
-MandelbrotSet *set;
+// make the application aware that there will be some definitions later on
+bool isEqual(Pixel* first, Pixel* second);
+void compare(Pixel* first, Pixel* second, int width, int height);
+void process(MandelbrotSet* set, double scale, dim3 blocks, dim3 threads);
+string logStats(int times, dim3 blocks, dim3 threads, MandelbrotSet* set, float scale, fstream &statsFile, bool recommended);
+/*
+function to create filename that tracks the image size, kernel configuration and execution time
+w - width
+h - height
+t - threads
+a - average
+unit - unit (milliseconds or nanoseconds)
+*/
+string nameFile(int width, int height, dim3 threads, long time, string unit, bool recommended);
 
 __constant__ Pixel shades[TOTAL_SHADES] = {
 	{ 66,30,15 },
@@ -24,13 +35,16 @@ __constant__ Pixel shades[TOTAL_SHADES] = {
 	{ 106,52,3 }
 };
 
+__constant__ Pixel black = { 0, 0, 0 };
+
+// MandelBrot algorithm on __device__
 __global__ void calc_mandel(Pixel  *data, const int width, const int height, const double scale, const Complex number)
 {
 	int row = blockIdx.y * blockDim.y + threadIdx.y;
 	int column = blockIdx.x * blockDim.x + threadIdx.x;
 	int index = row * width + column;
-	float x = (column - width/2) * scale - 0.6f;
-	float y = (row - height/2) * scale + 0.0f;
+	const float x = (column - width/2) * scale - 0.6f;
+	const float y = (row - height/2) * scale + 0.0f;
 	float zx, zy, xx = x*x, yy = y*y;
 	unsigned char iter = 0;
 
@@ -47,129 +61,153 @@ __global__ void calc_mandel(Pixel  *data, const int width, const int height, con
 		zy = 2 * zx * zy + y;
 		zx = xx - yy + x;;
 	} while ((xx + yy <= 4.0f) && (iter++ < MAXIT));
-	if (iter == MAXIT || iter == 0) {
-		data[index].r = 0; data[index].g = 0; data[index].b = 0;
-	}
-	else {
-		data[index] = shades[iter % TOTAL_SHADES];
-	}	
+	data[index] = (iter == MAXIT || iter == 0) ? black : shades[iter % TOTAL_SHADES];
 }
-
-void process(MandelbrotSet* set, double scale, char* fileName, dim3 blocks, dim3 threads) {
-	int w = set->getWidth();
-	int h = set->getHeight();
-	Complex n = set->getComplex();
-	calc_mandel << <blocks, threads>> >(set->getDeviceReference(), w, h, scale, n);
-	set->fetch();
-}
-
-// using occupancy api from:
-// https://devblogs.nvidia.com/parallelforall/cuda-pro-tip-occupancy-api-simplifies-launch-configuration/
-KernelProperties calculateKernelLimits(int width, int height) {
-	int blockSize;   // The launch configurator returned block size
-	int minGridSize; // The minimum grid size needed to achieve the
-					 // maximum occupancy for a full device launch
-	int gridSize;    // The actual grid size needed, based on input size
-
-	cudaOccupancyMaxPotentialBlockSize(&minGridSize, &blockSize, calc_mandel, 0, 0);
-	// Round up according to array size
-
-	gridSize = (width + blockSize - 1) / blockSize;
-	printf("Grid size: %d; Block Size: %d\n", gridSize, blockSize);
-	// calculate theoretical occupancy
-	int maxActiveBlocks;
-	cudaOccupancyMaxActiveBlocksPerMultiprocessor(&maxActiveBlocks, calc_mandel, blockSize, 0);
-
-	int device;
-	cudaDeviceProp props;
-	printf("Max grid size: %d\n", props.maxGridSize);
-	printf("Max block size: %d\n", props.maxThreadsPerBlock);
-	printf("Max shared memory per block: %d\n", props.sharedMemPerBlock);
-	cudaGetDevice(&device);
-	cudaGetDeviceProperties(&props, device);
-
-	float occupancy = (maxActiveBlocks * blockSize / props.warpSize) / (float)(props.maxThreadsPerMultiProcessor / props.warpSize);
-
-	printf("Launched grid of size %d, with %d threads. Theoretical occupancy: %f\n", gridSize, blockSize, occupancy);
-	return{ gridSize, blockSize };
-}
-
-const int POWERS[13] = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096 };
 
 int main(int argc, char *argv[])
 {
+	/* parse arguments 
+	argv[1] = width
+	argv[2] = height
+	argv[3] = compare cpu vs gpu outputs? "false" or no argument for false or anything else for true;
+	argv[4] = real part of complex number
+	argv[5] = imaginary part of complex number
+	*/
+	const auto width  = argc > 1 ? std::atoi(argv[1]) : 4096;
+	const auto height = argc > 2 ? std::atoi(argv[2]) : 4096;
+	auto shouldCompare = argc > 3 ? true : false;
+	if (shouldCompare) {
+		string value(argv[3]);
+		shouldCompare = value == "false" ? false : true;
+	};
+	auto real = argc > 4 ? std::atol(argv[4]) : -0.6f;
+	auto imaginary = argc > 5 ? std::atol(argv[5]) : -0.0f;
+	const auto scale = 4.0f / width;
+
+	// open valid csv file for writing and add headers or exit
+	fstream outputStatsFile(to_string(width) + "x" + to_string(height) + "-log.csv", fstream::out);
+	if (outputStatsFile.is_open()) {
+		std::cout << std::endl << "SUCCESS OPENING FILE" << endl;
+		outputStatsFile << "Width, Height, Blocks, Threads, Millis, Nanos\n";
+	} else {
+		std::cout << "CANNOT OPEN FILE " << to_string(width) + "x" + to_string(height) + "-log.csv";
+		std::cout << std::endl << "Please make sure the file is not opened already in Excel.";
+		return -1;
+	}
 	
-  const int width  = (argc > 1) ? std::atoi(argv[1]) : 4096;
-  const int height = (argc > 2) ? std::atoi(argv[2]) : 4096;
-  double real = (argc > 3) ? std::atol(argv[3]) : -0.6f;
-  double imaginary = (argc > 4) ? std::atol(argv[4]) : -0.0f;
-  char* fileName = (argc > 5) ? argv[5] : "testOutput.ppm";
-  const double scale = 4.0f / width;
-  string logName = "C:/Users/b00243868/Desktop/default_GPGPU/Debug/_"+to_string(width)+"x"+to_string(height)+"-log.csv";
-  const char* logFileName = logName.c_str();
-  fstream logFILE(logFileName, fstream::out);
-  if (logFILE.is_open()) {
-	  cout << "SUCCESS OPENING FILE";
-  }
-  else {
-	  cout << "CANNOT OPEN FILE " << logFileName;
-  }
-  logFILE << "Width, Height, Blocks, Threads, Millis, Nanos\n";
-  set = new MandelbrotSet(width, height, { real, imaginary });
-  long time = 0.0f;
-  string unit = "";
+	// create gpu mandelbrot set
+	auto set = new MandelbrotSet(width, height, { real, imaginary });
+	
+	// generate sets output and log configurations for threads = power of 2 and blocks is depending on image width
+	for (auto power = 0; power < 13; power++) {
+		auto threads = POWERS[power];
+		auto blocks = width / threads;
+		set->saveAs(
+			logStats(
+				CYCLES, 
+				dim3(blocks, blocks), 
+				dim3(threads,threads),
+				set,
+				scale, 
+				outputStatsFile, 
+				SKIP_RECOMMENDED_SUFFIX));
+	}
+	
+	// generate set output for recommended settings using the CUDA occupancy API
+	KernelProperties recommended = calculateKernelLimits(width, height, calc_mandel);
+	set->saveAs(
+		logStats(
+			CYCLES, 
+			recommended.gridSize, 
+			recommended.blockSize, 
+			set,
+			scale, 
+			outputStatsFile, 
+			ADD_RECOMMENDED_SUFFIX));
+	
+	if (shouldCompare) {
+		cout << "Comparing the two outputs" << endl;
+		auto cpuSet = new CpuMandel(width, height, scale);
+		compare(cpuSet->getImage(), set->getHostReference(), width, height);
+		delete cpuSet;
+	} else {
+		cout << endl << "Skipping output comparison by default; add 3rd argument to compare outputs i.e.: gpu.exe 4096 4096 true" << endl;
+	}
 
-  for (int power = 0; power < 13; power++) {
-	  int threads = POWERS[power];
-	  string name = "";
-	  dim3 blockSize(threads, threads);
-	  dim3 gridSize(width / threads, height / threads);
-	  time = 0.0f;
-	  for (int i = 0; i < CYCLES; i++) {
-		  logFILE << width << "," << height << "," << width / threads << "," << threads << ",";
-		  cout << "Attempt [" << i << "] " << gridSize.x << " blocks; " << blockSize.x << " threads: ";
-		  auto value = measure(process, set, scale, fileName, gridSize, blockSize);
-		  if (value.millis > NANOLIMIT) {
-			  time += value.millis; 
-			  unit = "_milliseconds_";
-			  
-		  }
-		  else {
-			  time += value.nano;
-			  unit = "_nanoseconds_";
-		  }
-		  logFILE << value.millis << "," << value.nano << "\n";
-	  }
-	  cout << "Average time: " << time / CYCLES << endl;
-	  name.append(to_string(width) + "x" + to_string(height) + "_Blocks_" + to_string(width / threads) + "_Threads_" + to_string(threads) + unit + to_string(time / CYCLES) + ".ppm");
-	  cout << endl << "FILENAME IS: " << name << endl;
-	  set->saveAs(name);
-  }
-  KernelProperties suggested = calculateKernelLimits(width, height);
-  dim3 gridSize(suggested.gridSize, suggested.gridSize);
-  dim3 blockSize(suggested.blockSize, suggested.blockSize);
-  time = 0;
-  for (int i = 0; i < CYCLES; i++) {
-	  logFILE << width << "," << height << "," << suggested.gridSize << "," << suggested.blockSize << ",";
-	  cout << "Attempt [" << i << "] " << gridSize.x << " blocks; " << blockSize.x << " threads: ";
-	  auto value = measure(process, set, scale, fileName, gridSize, blockSize);
-	  if (value.millis > NANOLIMIT) {
-		  time += value.millis;
-		  unit = "_milliseconds_";
-	  }
-	  else {
-		  time += value.nano;
-		  unit = "_nanoseconds_";
-	  }
-	  logFILE << value.millis << "," << value.nano << ",RECOMMENDED\n";
-  }
-  string name = "";
-  name.append(to_string(width) + "x" + to_string(height) + "_Blocks_" + to_string(suggested.gridSize) + "_Threads_" + to_string(suggested.blockSize) + unit + to_string(time / CYCLES) + "___RECOMMENDED.ppm");
-  cout << "\nRecommended settings: " << suggested.gridSize << " blocks, " << suggested.blockSize << " threads completed in " << time / CYCLES << " " << unit << endl;
-  set->saveAs(name);
-  logFILE.close();
+	outputStatsFile.close();
+	delete set;
+	std::cin.get();
+	return 0;
+}
 
-  delete set;
-  std::cin.get();
-  return 0;
+bool isEqual(Pixel* first, Pixel* second) {
+	return first->b == second->b
+		&& first->g == second->g
+		&& first->r == second->r;
+};
+
+void compare(Pixel* first, Pixel* second, int width, int height) {
+	int size = width * height;
+	for (int i = 0; i < size; i++) {
+		if (!isEqual(first, second)) {
+			cout << endl << "Images are different";
+			cin.get();
+			return;
+		}
+		if (i && i % PIXEL_COUNT_REPORT == 0) {
+			cout << endl << "So far " << i << " pixels are identical";
+		}
+	}
+	cout << endl << "All " << size << " pixels are identical";
+	cout << endl << "Images are identical";
+	cin.get();
+};
+
+void process(MandelbrotSet* set, double scale, dim3 blocks, dim3 threads) {
+	calc_mandel << <blocks, threads >> >	(
+		set->getDeviceReference(),
+		set->getWidth(),
+		set->getHeight(),
+		scale,
+		set->getComplex());
+	set->fetch();
+}
+
+string nameFile(int width, int height, dim3 threads, long time, string unit, bool recommended) {
+	const string ending = recommended ? "___RECOMMENDED.ppm" : ".ppm";
+	string outputImageName = to_string(width) + "x"
+		+ to_string(height) + "_Blocks_"
+		+ to_string(width / threads.x) + "_Threads_"
+		+ to_string(threads.x) + unit
+		+ to_string(time / CYCLES)
+		+ ending;
+	std::cout << endl << "FILENAME IS: " << outputImageName << endl;
+	return outputImageName;
+}
+
+string logStats(int times, dim3 blocks, dim3 threads, MandelbrotSet* set, float scale, fstream &statsFile, bool recommended) {
+	long cycleTime = 0.0f;
+	string unit = "";
+	const string endline = recommended ? ", ,RECOMMENDED\n" : "\n";
+	const int w = set->getWidth();
+	const int h = set->getHeight();
+
+	for (int i = 0; i < times; i++) {
+
+		std::cout << "Attempt [" << i << "] " << blocks.x << " blocks; " << threads.x << " threads: ";
+		auto value = measure(process, set, scale, blocks, threads);
+		if (value.millis > NANOLIMIT) {
+			cycleTime += value.millis;
+			unit = "_milliseconds_";
+
+		}
+		else {
+			cycleTime += value.nano;
+			unit = "_nanoseconds_";
+		}
+		statsFile << w << "," << h << "," << w / threads.x << "," << threads.x << ",";
+		statsFile << value.millis << "," << value.nano << endline;
+	}
+	std::cout << "Average time: " << cycleTime / times << endl;
+	return nameFile(w, h, threads.x, cycleTime, unit, recommended);
 }
