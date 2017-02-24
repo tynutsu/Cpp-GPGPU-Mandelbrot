@@ -96,32 +96,32 @@ Time measure(M method, P&&... parameters) {
 
 template<class T>
 KernelProperties calculateKernelLimits(int width, int height, T function) {
-	int blockSize;   // The launch configurator returned block size
+	int maxBlockSize;   // The launch configurator returned block size
 	int minGridSize; // The minimum grid size needed to achieve the
 					 // maximum occupancy for a full device launch
-	int gridSize;    // The actual grid size needed, based on input size
+	dim3 gridDimension;    // The actual grid size needed, based on input size
 
-	cudaOccupancyMaxPotentialBlockSize(&minGridSize, &blockSize, function, 0, 0);
+	cudaOccupancyMaxPotentialBlockSize(&minGridSize, &maxBlockSize, function, 0, 0);
 	// Round up according to array size
 
-	gridSize = (width + blockSize - 1) / blockSize;
+	dim3 blocksDimension = SATURATE.find(maxBlockSize)->second;
+
+	gridDimension.x = (width + blocksDimension.x - 1) / blocksDimension.x;
+	gridDimension.y = (height + blocksDimension.y - 1) / blocksDimension.y;
 	printf("\nCalculating the best configuration\n");
-	printf("Grid size: %d; Block Size: %d\n", gridSize, blockSize);
+	printf("Grid size: %d; Block Size: %d\n", gridDimension.x, maxBlockSize);
 	// calculate theoretical occupancy
 	int maxActiveBlocks;
-	cudaOccupancyMaxActiveBlocksPerMultiprocessor(&maxActiveBlocks, function, blockSize, 0);
+	cudaOccupancyMaxActiveBlocksPerMultiprocessor(&maxActiveBlocks, function, maxBlockSize, 0);
 
 	int device;
 	cudaDeviceProp props;
 	cudaGetDevice(&device);
 	cudaGetDeviceProperties(&props, device);
-	printf("Maximum active blocks: %f\n", (float) maxActiveBlocks);
-	printf("Minimum grid size: %f\n", (float)minGridSize);
-	printf("Grid size: %f\n", (float) gridSize);
-	float occupancy = (float)(maxActiveBlocks * blockSize) / (props.maxThreadsPerMultiProcessor);
-	printf("Launched blocks of size %d threads. Theoretical occupancy: %f\n", blockSize, occupancy);
-	dim3 blocks = dim3(gridSize, gridSize);
-	dim3 threads= dim3(blockSize);
-	return{ blocks , threads };
+	printf("\nMaximum active blocks: %f\n", (float) maxActiveBlocks);
+	printf("\nMinimum grid size: %f\n", (float)minGridSize);
+	float occupancy = (float)(maxActiveBlocks * maxBlockSize) / (props.maxThreadsPerMultiProcessor);
+	printf("\nLaunched blocks of size %d threads. Theoretical occupancy: %f\n", blocksDimension.x, occupancy);
+	return{ gridDimension , blocksDimension };
 };
 
