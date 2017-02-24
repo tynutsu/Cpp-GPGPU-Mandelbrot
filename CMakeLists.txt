@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 2.8.4) 
-set(CMAKE_CXX_STANDARD 11)
-project(cpu)
+cmake_minimum_required(VERSION 3.2) 
 
-set(CUDA_NVCC_FLAGS_DEBUG "${CUDA_NVCC_FLAGS_DEBUG};-Xptxas -v -use_fast_math -fmad=false")
-find_package(CUDA REQUIRED) # This is needed, to then use cuda_add_executable
-set_source_files_properties(cpu.cpp PROPERTIES CUDA_SOURCE_PROPERTY_FORMAT OBJ)
-cuda_add_executable(gpu gpu.cu)
+project (B00243868 VERSION 1.0.0)
 
-add_executable(cpu cpu.cpp)
+if (${PROJECT_SOURCE_DIR} STREQUAL ${PROJECT_BINARY_DIR})
+	message(FATAL_ERROR "In-tree builds are not supported; please run cmake in a separate build directory.")
+endif ()
+
+add_subdirectory ("${CMAKE_SOURCE_DIR}/cpu")
+add_subdirectory ("${CMAKE_SOURCE_DIR}/gpu")

@@ -38,7 +38,7 @@ __constant__ Pixel shades[TOTAL_SHADES] = {
 __global__ void calc_mandel(Pixel  *data, const int width, const int height, const double scale, const Complex number) {
 	int column = blockIdx.x * blockDim.x + threadIdx.x;
 	int row = blockIdx.y * blockDim.y + threadIdx.y;
-	int index = (height - row - 1) * width + column; // reverse order
+	int index = (height - 1 - row) * width + column; // reverse order
 
 	if (column >= width || row >= height) {
 		return;
@@ -81,8 +81,8 @@ int main(int argc, char *argv[]) {
 	*/
 	const auto width  = argc > 1 ? std::atoi(argv[1]) : 4096;
 	const auto height = argc > 2 ? std::atoi(argv[2]) : 4096;
-	bool shouldCompare = argc > 3 ? true : false; 
-	if (shouldCompare) {
+	bool shouldCompare = argc > 3 ? false : true; 
+	if (!shouldCompare) {
 		string value(argv[3]);
 		shouldCompare = value == "true" ? true : false;
 	}
@@ -104,10 +104,10 @@ int main(int argc, char *argv[]) {
 	}
 	
 	// create gpu mandelbrot set
-	MandelbrotSet* setGPU = new MandelbrotSet(width, height, { real, imaginary });
 	
 	// generate sets output and log configurations for threads = power of 2 and blocks is depending on image width
-	for (auto power = 0; power < 13; power++) {
+	for (auto power = 0; power < 6; power++) {
+		MandelbrotSet* setGPU = new MandelbrotSet(width, height, { real, imaginary });
 		int threads = POWERS[power];
 		if (threads > width) {
 			break;
@@ -117,14 +117,16 @@ int main(int argc, char *argv[]) {
 			logStats(
 				CYCLES, 
 				dim3(blocks, blocks),
-				dim3(threads, threads),
+				dim3(threads,threads),
 				setGPU,
 				scale, 
 				outputStatsFile, 
 				SKIP_RECOMMENDED_SUFFIX));
+		delete setGPU;
 	}
 	
 	// generate set output for recommended settings using the CUDA occupancy API
+	MandelbrotSet* setGPU = new MandelbrotSet(width, height, { real, imaginary });
 	KernelProperties recommended = calculateKernelLimits(width, height, calc_mandel);
 	setGPU->saveAs(
 		logStats(

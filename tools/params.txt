@@ -1,0 +1,24 @@
+Test Custom Kernel Config allows the user to manually input the kernel configuration to generate 
+a Mandelbrot Set of a specific size using the command line interface.
+
+command signature (defaults on the right):
+
+testKernelConfig.exe
+	<width : 4096> 
+	<height : 4096> 
+	<block.X : 256> 
+	<block.Y : 256> 
+	<thread.X : 16> 
+	<thread.Y : 16>
+	<cycles : 1>
+
+block.X multiplied by block.Y should be equal to grid size.
+thread.X multiplied by thread.Y should be equal to block size.
+On Compute 3.2 max grid size is 16 and max block size is 1024.
+
+example:
+testKernelConfig.exe 4096 4096 256 256 16 16
+
+get average time for previous config
+testKernelConfig.exe 4096 4096 256 256 16 16 10
+
