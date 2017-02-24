@@ -104,10 +104,10 @@ int main(int argc, char *argv[]) {
 	}
 	
 	// create gpu mandelbrot set
-	MandelbrotSet* setGPU = new MandelbrotSet(width, height, { real, imaginary });
 	
 	// generate sets output and log configurations for threads = power of 2 and blocks is depending on image width
 	for (auto power = 0; power < 13; power++) {
+		MandelbrotSet* setGPU = new MandelbrotSet(width, height, { real, imaginary });
 		int threads = POWERS[power];
 		if (threads > width) {
 			break;
@@ -117,14 +117,16 @@ int main(int argc, char *argv[]) {
 			logStats(
 				CYCLES, 
 				dim3(blocks, blocks),
-				dim3(threads, threads),
+				dim3(threads,threads),
 				setGPU,
 				scale, 
 				outputStatsFile, 
 				SKIP_RECOMMENDED_SUFFIX));
+		delete setGPU;
 	}
 	
 	// generate set output for recommended settings using the CUDA occupancy API
+	MandelbrotSet* setGPU = new MandelbrotSet(width, height, { real, imaginary });
 	KernelProperties recommended = calculateKernelLimits(width, height, calc_mandel);
 	setGPU->saveAs(
 		logStats(

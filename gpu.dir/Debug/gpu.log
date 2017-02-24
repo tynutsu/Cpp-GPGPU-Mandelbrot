@@ -1,0 +1,52 @@
+﻿Build started 24/02/2017 10:53:34.
+     1>Project "C:\Users\b00243868\Desktop\default_GPGPU\gpu.vcxproj" on node 2 (Rebuild target(s)).
+     1>CustomBuild:
+         Building NVCC (Device) object CMakeFiles/gpu.dir/Debug/gpu_generated_gpu.cu.obj
+         gpu.cu
+         
+     1>CUSTOMBUILD : nvcc warning : The 'compute_20', 'sm_20', and 'sm_21' architectures are deprecated, and may be removed in a future release (Use -Wno-deprecated-gpu-targets to suppress warning).
+         
+     1>C:/Users/b00243868/Desktop/default_GPGPU/gpu.cu(238): warning : unrecognized character escape sequence
+         
+         
+         
+     1>C:/Users/b00243868/Desktop/default_GPGPU/gpu.cu(238): warning : unrecognized character escape sequence
+         
+         
+         
+         ptxas info    : 1128 bytes gmem, 48 bytes cmem[2], 168 bytes cmem[14]
+         
+         ptxas info    : Compiling entry function '_Z11calc_mandelP5Pixeliid7Complex' for 'sm_20'
+         
+         ptxas info    : Function properties for _Z11calc_mandelP5Pixeliid7Complex
+         
+             0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+         
+         ptxas info    : Used 21 registers, 72 bytes cmem[0], 12 bytes cmem[16]
+         
+     1>CUSTOMBUILD : nvcc warning : The 'compute_20', 'sm_20', and 'sm_21' architectures are deprecated, and may be removed in a future release (Use -Wno-deprecated-gpu-targets to suppress warning).
+         
+         gpu.cu
+         
+         Building Custom Rule C:/Users/b00243868/Desktop/default_GPGPU/CMakeLists.txt
+         CMake does not need to re-run because C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\generate.stamp is up-to-date.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\include" /Zi /nologo /W3 /WX- /Od /Ob0 /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"gpu.dir\Debug\\" /Fd"gpu.dir\Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt CpuMandel.cpp MandelbrotSet.cpp Util.cpp
+         CpuMandel.cpp
+     1>CpuMandel.cpp(31): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
+         MandelbrotSet.cpp
+         Util.cpp
+         Generating Code...
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\b00243868\Desktop\default_GPGPU\Debug\gpu.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\lib\Win32\cudart_static.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/b00243868/Desktop/default_GPGPU/Debug/gpu.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/b00243868/Desktop/default_GPGPU/Debug/gpu.lib" /MACHINE:X86 /SAFESEH  /machine:X86 /debug gpu.dir\Debug\CpuMandel.obj
+         gpu.dir\Debug\MandelbrotSet.obj
+         gpu.dir\Debug\Util.obj
+         C:\Users\b00243868\Desktop\default_GPGPU\CMakeFiles\gpu.dir\Debug\gpu_generated_gpu.cu.obj
+            Creating library C:/Users/b00243868/Desktop/default_GPGPU/Debug/gpu.lib and object C:/Users/b00243868/Desktop/default_GPGPU/Debug/gpu.exp
+         gpu.vcxproj -> C:\Users\b00243868\Desktop\default_GPGPU\Debug\gpu.exe
+     1>Done Building Project "C:\Users\b00243868\Desktop\default_GPGPU\gpu.vcxproj" (Rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:06.44

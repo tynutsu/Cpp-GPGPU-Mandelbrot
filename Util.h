@@ -50,7 +50,7 @@ struct KernelProperties { dim3 gridSize, blockSize; };
 
 const int POWERS[13] = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096 };
 
-const map<int, dim3> SQRT = {	// TOTAAL THREADS; x,   y,   z
+const map<int, dim3> SATURATE = {	// TOTAAL THREADS; x,   y,   z
 	{4096, dim3(64,64)},				// 4096 = 64 x 64 x  1
 	{2048, dim3(32,32,2)},				// 2048 = 32 x 32 x  2
 	{1024, dim3(32,32)},				// 1024 = 32 x 32 x  1
@@ -115,18 +115,13 @@ KernelProperties calculateKernelLimits(int width, int height, T function) {
 	cudaDeviceProp props;
 	cudaGetDevice(&device);
 	cudaGetDeviceProperties(&props, device);
-
+	printf("Maximum active blocks: %f\n", (float) maxActiveBlocks);
+	printf("Minimum grid size: %f\n", (float)minGridSize);
+	printf("Grid size: %f\n", (float) gridSize);
 	float occupancy = (float)(maxActiveBlocks * blockSize) / (props.maxThreadsPerMultiProcessor);
-	printf("Launched grid of size %d, with %d threads. Theoretical occupancy: %f\n", gridSize, blockSize, occupancy);
-	// spread the block size getting a precomputed sqrt or precomputed configuration for non square numbers
-	if (SATURATE_KERNEL_CONFIGURATION) {
-		dim3 blocks = SQRT.find(gridSize)->second;
-		dim3 threads = SQRT.find(blockSize)->second;
-		printf("Using saturation: grid layout [%i,%i,%i], threads layout [%i,%i,%i]\n", blocks.x, blocks.y, blocks.z, threads.x, threads.y, threads.z);
-		return{ blocks , threads };
-	}
-	else {
-		return{ dim3(gridSize, gridSize), dim3(blockSize,blockSize) };
-	}
+	printf("Launched blocks of size %d threads. Theoretical occupancy: %f\n", blockSize, occupancy);
+	dim3 blocks = dim3(gridSize, gridSize);
+	dim3 threads= dim3(blockSize);
+	return{ blocks , threads };
 };
 
