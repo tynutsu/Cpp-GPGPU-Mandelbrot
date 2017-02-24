@@ -5,20 +5,32 @@
 #include <chrono>
 #include <limits>
 #include <fstream>
+#include <istream>
 #include <cmath>
+#include <map>
+
+using namespace std;
+using namespace chrono;
 
 #ifndef TOTAL_SHADES
 #define TOTAL_SHADES 16
 #endif
 
+#ifndef LOG
+#define LOG false
+#endif
+
+// upper limit for which time unit is displayed from milliseconds to nanoseconds
 #ifndef NANOLIMIT
-#define NANOLIMIT 13
+#define NANOLIMIT 15
 #endif
 
+// number of cycles to run one kernel to calculate average
 #ifndef CYCLES
-#define CYCLES 5
+#define CYCLES 1
 #endif
 
+// just for better reading the next two
 #ifndef ADD_RECOMMENDED_SUFFIX
 #define ADD_RECOMMENDED_SUFFIX true
 #endif
@@ -27,8 +39,8 @@
 #define SKIP_RECOMMENDED_SUFFIX false
 #endif
 
-#ifndef PIXEL_COUNT_REPORT
-#define PIXEL_COUNT_REPORT 1000000
+#ifndef SATURATE_KERNEL_CONFIGURATION
+#define SATURATE_KERNEL_CONFIGURATION true
 #endif
 
 
@@ -38,10 +50,24 @@ struct KernelProperties { dim3 gridSize, blockSize; };
 
 const int POWERS[13] = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096 };
 
-using namespace std;
-using namespace chrono;
+const map<int, dim3> SQRT = {	// TOTAAL THREADS; x,   y,   z
+	{4096, dim3(64,64)},				// 4096 = 64 x 64 x  1
+	{2048, dim3(32,32,2)},				// 2048 = 32 x 32 x  2
+	{1024, dim3(32,32)},				// 1024 = 32 x 32 x  1
+	{512, dim3(16,16,2)},				//  512 = 16 x 16 x  2
+	{256, dim3(16,16)},					//  256 = 16 x 16 x  1
+	{128, dim3(8,8,2)},					//  128 =  8 x  8 x  1
+	{64, dim3(8,8)},					//   64 =  8 x  8 x  1
+	{32, dim3(4,4,2)},					//   32 =  4 x  4 x  2
+	{16, dim3(4,4)},					//   16 =  4 x  4 x  1
+	{8, dim3(2,2,2)},					//    8 =  2 x  2 x  2
+	{4, dim3(2,2)},						//    4 =  2 x  2 x  1
+	{2, dim3{2,1}},						//    2 =  2 x  1 x  1
+	{1, dim3(1)}						//    1 =  1 x  1 x  1
+};
 
 const unsigned char MAXIT = std::numeric_limits<unsigned char>::max();
+const int BUFFER_SIZE = 4096;
 struct Time { long long nano, millis; };
 
 
@@ -79,6 +105,7 @@ KernelProperties calculateKernelLimits(int width, int height, T function) {
 	// Round up according to array size
 
 	gridSize = (width + blockSize - 1) / blockSize;
+	printf("\nCalculating the best configuration\n");
 	printf("Grid size: %d; Block Size: %d\n", gridSize, blockSize);
 	// calculate theoretical occupancy
 	int maxActiveBlocks;
@@ -90,8 +117,16 @@ KernelProperties calculateKernelLimits(int width, int height, T function) {
 	cudaGetDeviceProperties(&props, device);
 
 	float occupancy = (float)(maxActiveBlocks * blockSize) / (props.maxThreadsPerMultiProcessor);
-
 	printf("Launched grid of size %d, with %d threads. Theoretical occupancy: %f\n", gridSize, blockSize, occupancy);
-	return{ dim3(gridSize, gridSize), dim3(blockSize,blockSize) };
+	// spread the block size getting a precomputed sqrt or precomputed configuration for non square numbers
+	if (SATURATE_KERNEL_CONFIGURATION) {
+		dim3 blocks = SQRT.find(gridSize)->second;
+		dim3 threads = SQRT.find(blockSize)->second;
+		printf("Using saturation: grid layout [%i,%i,%i], threads layout [%i,%i,%i]\n", blocks.x, blocks.y, blocks.z, threads.x, threads.y, threads.z);
+		return{ blocks , threads };
+	}
+	else {
+		return{ dim3(gridSize, gridSize), dim3(blockSize,blockSize) };
+	}
 };
 

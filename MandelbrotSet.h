@@ -1,8 +1,7 @@
 #pragma once
 #include "Util.h"
 
-class MandelbrotSet
-{
+class MandelbrotSet {
 private:
 	Pixel *setOnHost;			// the Mandelbrot set data on the host RAM
 	Pixel *setOnDevice;			// the Mandelbrot set on data the device RAM
@@ -26,13 +25,10 @@ public:
 
 	void fetch();
 
-	inline void saveAs(std::string fileName) {
-		FILE *fp = fopen(fileName.c_str(), "w");
-		fprintf(fp, "P6\n%d %d\n255\n", width, height);
-		for (int i = height - 1; i >= 0; i--) {
-			fwrite(setOnHost + i * width, 1, width * sizeof(Pixel), fp);
-		}
-		fclose(fp);
+	void saveAs(std::string fileName) {
+		std::ofstream file(fileName.c_str());
+		file << "P6\n" << width << " " << height << "\n255\n";
+		file.write((char*) setOnHost, height * width * sizeof(Pixel));
 	}
 };
 

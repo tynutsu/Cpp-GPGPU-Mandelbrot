@@ -2,8 +2,6 @@
 #include "CpuMandel.h"
 
 // make the application aware that there will be some definitions later on
-bool isEqual(Pixel* first, Pixel* second);
-void compare(Pixel* first, Pixel* second, int width, int height);
 void process(MandelbrotSet* set, double scale, dim3 blocks, dim3 threads);
 string logStats(int times, dim3 blocks, dim3 threads, MandelbrotSet* set, float scale, fstream &statsFile, bool recommended);
 /*
@@ -15,6 +13,7 @@ a - average
 unit - unit (milliseconds or nanoseconds)
 */
 string nameFile(int width, int height, dim3 threads, long time, string unit, bool recommended);
+bool compareFiles(const string& firstImageName, const string& secondImageName);
 
 __constant__ Pixel shades[TOTAL_SHADES] = {
 	{ 66,30,15 },
@@ -35,37 +34,44 @@ __constant__ Pixel shades[TOTAL_SHADES] = {
 	{ 106,52,3 }
 };
 
-__constant__ Pixel black = { 0, 0, 0 };
-
 // MandelBrot algorithm on __device__
-__global__ void calc_mandel(Pixel  *data, const int width, const int height, const double scale, const Complex number)
-{
-	int row = blockIdx.y * blockDim.y + threadIdx.y;
+__global__ void calc_mandel(Pixel  *data, const int width, const int height, const double scale, const Complex number) {
 	int column = blockIdx.x * blockDim.x + threadIdx.x;
-	int index = row * width + column;
-	const float x = (column - width/2) * scale - 0.6f;
-	const float y = (row - height/2) * scale + 0.0f;
-	float zx, zy, xx = x*x, yy = y*y;
-	unsigned char iter = 0;
+	int row = blockIdx.y * blockDim.y + threadIdx.y;
+	int index = (height - row - 1) * width + column; // reverse order
 
-	zx = hypot(x - 0.25f, y);
-	if (x < zx - 2 * zx * zx + .25 || (x + 1)*(x + 1) + yy < 1 / 16) {
-		data[index].r = 0; data[index].g = 0; data[index].b = 0;
+	if (column >= width || row >= height) {
 		return;
 	}
-	zx = 0.0f; zy = 0.0f;
-	do
-	{
-		xx = zx * zx;
-		yy = zy * zy;
-		zy = 2 * zx * zy + y;
-		zx = xx - yy + x;;
-	} while ((xx + yy <= 4.0f) && (iter++ < MAXIT));
-	data[index] = (iter == MAXIT || iter == 0) ? black : shades[iter % TOTAL_SHADES];
+
+	double x0 = (column - width / 2) * scale + number.real;
+	double y0 = (row - height / 2) * scale + number.imaginary;
+	double x = hypot(x0 - 0.25, y0);
+	double y = y0 * y0;		// using it here to initialize directly with the squre of y, will be used as normal later
+	double xx = x * x;
+	double yy = (x0 + 1)*(x0 + 1);	// temporary use as well
+
+	if (x - 2 * xx + 0.25 >= x0 || yy + y < 0.0625) {
+		return;
+	}
+	
+	x = y = xx = yy = 0.0; // resetting and using as normal
+	uint8_t iter = 0;
+
+	do {
+		y = 2 * x * y + y0;
+		x = xx - yy + x0;
+		xx = x * x;
+		yy = y * y;
+	} while (iter++ < MAXIT && xx + yy < 4.0);
+
+	if (iter != MAXIT && iter != 0) {
+		data[index] = shades[iter % TOTAL_SHADES];
+	}
+	
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
 	/* parse arguments 
 	argv[1] = width
 	argv[2] = height
@@ -75,20 +81,22 @@ int main(int argc, char *argv[])
 	*/
 	const auto width  = argc > 1 ? std::atoi(argv[1]) : 4096;
 	const auto height = argc > 2 ? std::atoi(argv[2]) : 4096;
-	auto shouldCompare = argc > 3 ? true : false;
+	bool shouldCompare = argc > 3 ? true : false; 
 	if (shouldCompare) {
 		string value(argv[3]);
-		shouldCompare = value == "false" ? false : true;
-	};
-	auto real = argc > 4 ? std::atol(argv[4]) : -0.6f;
-	auto imaginary = argc > 5 ? std::atol(argv[5]) : -0.0f;
-	const auto scale = 4.0f / width;
+		shouldCompare = value == "true" ? true : false;
+	}
+	const double real = argc > 4 ? std::atol(argv[4]) : -0.6;
+	const double imaginary = argc > 5 ? std::atol(argv[5]) : -0.0;
+	const float scale = 4.0f / width;
 
 	// open valid csv file for writing and add headers or exit
 	fstream outputStatsFile(to_string(width) + "x" + to_string(height) + "-log.csv", fstream::out);
 	if (outputStatsFile.is_open()) {
 		std::cout << std::endl << "SUCCESS OPENING FILE" << endl;
-		outputStatsFile << "Width, Height, Blocks, Threads, Millis, Nanos\n";
+		outputStatsFile << "Width, Height\n";
+		outputStatsFile << width << "," << height << "\n";
+		outputStatsFile << "Blocks, Grid Layout, Threads, Block Layout, Millis, Nanos\n";
 	} else {
 		std::cout << "CANNOT OPEN FILE " << to_string(width) + "x" + to_string(height) + "-log.csv";
 		std::cout << std::endl << "Please make sure the file is not opened already in Excel.";
@@ -96,18 +104,21 @@ int main(int argc, char *argv[])
 	}
 	
 	// create gpu mandelbrot set
-	auto set = new MandelbrotSet(width, height, { real, imaginary });
+	MandelbrotSet* setGPU = new MandelbrotSet(width, height, { real, imaginary });
 	
 	// generate sets output and log configurations for threads = power of 2 and blocks is depending on image width
 	for (auto power = 0; power < 13; power++) {
-		auto threads = POWERS[power];
-		auto blocks = width / threads;
-		set->saveAs(
+		int threads = POWERS[power];
+		if (threads > width) {
+			break;
+		}
+		int blocks = width / threads;
+		setGPU->saveAs(
 			logStats(
 				CYCLES, 
-				dim3(blocks, blocks), 
-				dim3(threads,threads),
-				set,
+				dim3(blocks, blocks),
+				dim3(threads, threads),
+				setGPU,
 				scale, 
 				outputStatsFile, 
 				SKIP_RECOMMENDED_SUFFIX));
@@ -115,54 +126,29 @@ int main(int argc, char *argv[])
 	
 	// generate set output for recommended settings using the CUDA occupancy API
 	KernelProperties recommended = calculateKernelLimits(width, height, calc_mandel);
-	set->saveAs(
+	setGPU->saveAs(
 		logStats(
 			CYCLES, 
 			recommended.gridSize, 
 			recommended.blockSize, 
-			set,
+			setGPU,
 			scale, 
 			outputStatsFile, 
 			ADD_RECOMMENDED_SUFFIX));
-	
-	if (shouldCompare) {
-		cout << "Comparing the two outputs" << endl;
-		auto cpuSet = new CpuMandel(width, height, scale);
-		compare(cpuSet->getImage(), set->getHostReference(), width, height);
-		delete cpuSet;
-	} else {
-		cout << endl << "Skipping output comparison by default; add 3rd argument to compare outputs i.e.: gpu.exe 4096 4096 true" << endl;
-	}
 
 	outputStatsFile.close();
-	delete set;
+	if (shouldCompare) {
+		CpuMandel* setCPU = new CpuMandel(width, height, scale);
+		compareFiles("cpuOutput.ppm", "recommended.ppm");
+		delete setCPU;
+	}
+	delete setGPU;
+	
 	std::cin.get();
 	return 0;
 }
 
-bool isEqual(Pixel* first, Pixel* second) {
-	return first->b == second->b
-		&& first->g == second->g
-		&& first->r == second->r;
-};
-
-void compare(Pixel* first, Pixel* second, int width, int height) {
-	int size = width * height;
-	for (int i = 0; i < size; i++) {
-		if (!isEqual(first, second)) {
-			cout << endl << "Images are different";
-			cin.get();
-			return;
-		}
-		if (i && i % PIXEL_COUNT_REPORT == 0) {
-			cout << endl << "So far " << i << " pixels are identical";
-		}
-	}
-	cout << endl << "All " << size << " pixels are identical";
-	cout << endl << "Images are identical";
-	cin.get();
-};
-
+// simple wrapper to send to the measure template which performs a fetch at the end
 void process(MandelbrotSet* set, double scale, dim3 blocks, dim3 threads) {
 	calc_mandel << <blocks, threads >> >	(
 		set->getDeviceReference(),
@@ -173,20 +159,22 @@ void process(MandelbrotSet* set, double scale, dim3 blocks, dim3 threads) {
 	set->fetch();
 }
 
-string nameFile(int width, int height, dim3 threads, long time, string unit, bool recommended) {
-	const string ending = recommended ? "___RECOMMENDED.ppm" : ".ppm";
-	string outputImageName = to_string(width) + "x"
+// function to build the name of the image containing kernel configuration and other details
+string nameFile(int width, int height, dim3 threads, long long time, string unit, bool recommended) {
+	// if recommended save as "recommended.ppm" else build the imageName
+	string outputImageName = recommended ? "recommended.ppm" : to_string(width) + "x"
 		+ to_string(height) + "_Blocks_"
 		+ to_string(width / threads.x) + "_Threads_"
 		+ to_string(threads.x) + unit
 		+ to_string(time / CYCLES)
-		+ ending;
+		+ ".ppm";
 	std::cout << endl << "FILENAME IS: " << outputImageName << endl;
 	return outputImageName;
 }
 
+// function to log time into a excel file format (comma separated values)
 string logStats(int times, dim3 blocks, dim3 threads, MandelbrotSet* set, float scale, fstream &statsFile, bool recommended) {
-	long cycleTime = 0.0f;
+	long long cycleTime = 0;
 	string unit = "";
 	const string endline = recommended ? ", ,RECOMMENDED\n" : "\n";
 	const int w = set->getWidth();
@@ -205,9 +193,46 @@ string logStats(int times, dim3 blocks, dim3 threads, MandelbrotSet* set, float 
 			cycleTime += value.nano;
 			unit = "_nanoseconds_";
 		}
-		statsFile << w << "," << h << "," << w / threads.x << "," << threads.x << ",";
+		int gridSize = blocks.x * blocks.y * blocks.z;
+		int blockSize = threads.x * threads.y * threads.z;
+		statsFile << gridSize << ",[" << blocks.x << "-" << blocks.y << "-" << blocks.z << "],";
+		statsFile << blockSize << ",[" << threads.x << "-" << threads.y << "-" << threads.z << "],";
 		statsFile << value.millis << "," << value.nano << endline;
 	}
 	std::cout << "Average time: " << cycleTime / times << endl;
 	return nameFile(w, h, threads.x, cycleTime, unit, recommended);
-}
+};
+
+// using Quick comparison of two files code from http://www.cplusplus.com/forum/general/94032/
+bool compareFiles(const string& firstImageName, const string& secondImageName)
+{
+	ifstream firstFile(firstImageName.c_str(), ifstream::in | ifstream::binary);
+	ifstream secondFile(secondImageName.c_str(), ifstream::in | ifstream::binary);
+
+	if (!firstFile.is_open() || !secondFile.is_open())
+	{
+		cout << "\n\n\nOne of the files could not be opened... aborting comparison\n\n\n";
+		return false;
+	}
+
+	char *firstBuffer = new char[BUFFER_SIZE]();
+	char *secondBuffer = new char[BUFFER_SIZE]();
+
+	do {
+		firstFile.read(firstBuffer, BUFFER_SIZE);
+		secondFile.read(secondBuffer, BUFFER_SIZE);
+
+		if (std::memcmp(firstBuffer, secondBuffer, BUFFER_SIZE) != 0)
+		{
+			delete[] firstBuffer;
+			delete[] secondBuffer;
+			cout << "\n\n\nFiles are different!\n\n\n";
+			return false;
+		}
+	} while (firstFile.good() || secondFile.good());
+
+	delete[] firstBuffer;
+	delete[] secondBuffer;
+	cout << "\n\All good, files are identical\n";
+	return true;
+};

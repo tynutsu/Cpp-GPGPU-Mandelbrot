@@ -1,14 +1,10 @@
 #include "CpuMandel.h"
 
-
-
-CpuMandel::CpuMandel()
-{
+CpuMandel::CpuMandel() {
 	run();
 }
 
-CpuMandel::CpuMandel(int w, int h, float s)
-{
+CpuMandel::CpuMandel(int w, int h, float s) {
 	this->width = w;
 	this->height = h;
 	this->scale = s;
@@ -16,14 +12,12 @@ CpuMandel::CpuMandel(int w, int h, float s)
 }
 
 
-CpuMandel::~CpuMandel()
-{
+CpuMandel::~CpuMandel() {
 	delete[] img_data;
 	delete[] row_ptrs;
 }
 
-void CpuMandel::map_colour(Pixel * const px)
-{
+void CpuMandel::map_colour(Pixel * const px) {
 	if (px->r == MAXIT || px->r == 0) {
 		px->r = 0; px->g = 0; px->b = 0;
 	}
@@ -33,27 +27,26 @@ void CpuMandel::map_colour(Pixel * const px)
 	}
 }
 
-void CpuMandel::screen_dump(const int width, const int height)
-{
+void CpuMandel::screen_dump(const int width, const int height) {
 	FILE *fp = fopen("cpuOutput.ppm", "w");
 	fprintf(fp, "P6\n%d %d\n255\n", width, height);
-	for (int i = height - 1; i >= 0; i--)
+	for (int i = height - 1; i >= 0; i--) {
 		fwrite(row_ptrs[i], 1, width * sizeof(Pixel), fp);
+	}
 	fclose(fp);
 }
 
-void CpuMandel::alloc_2d(const int width, const int height)
-{
+void CpuMandel::alloc_2d(const int width, const int height) {
 	img_data = new Pixel[width * height];
 	row_ptrs = new Pixel*[height];
 
 	row_ptrs[0] = img_data;
-	for (int i = 1; i < height; i++)
+	for (int i = 1; i < height; i++) {
 		row_ptrs[i] = row_ptrs[i - 1] + width;
+	}
 }
 
-void CpuMandel::calc_mandel(const int width, const int height, const double scale)
-{
+void CpuMandel::calc_mandel(const int width, const int height, const double scale) {
 	for (int i = 0; i < height; i++) {
 
 		const double y = (i - height / 2) * scale + cy;

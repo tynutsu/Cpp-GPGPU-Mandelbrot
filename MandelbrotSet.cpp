@@ -1,21 +1,17 @@
 #include "MandelbrotSet.h"
-#define LOG false
 
-MandelbrotSet::MandelbrotSet()
-{
+MandelbrotSet::MandelbrotSet() {
 	init();
 }
 
-MandelbrotSet::MandelbrotSet(int width, int height, Complex number)
-{
+MandelbrotSet::MandelbrotSet(int width, int height, Complex number) {
 	this->width = width;
 	this->height = height;
 	this->complexNumber = number;
 	init();
 }
 
-MandelbrotSet::~MandelbrotSet()
-{
+MandelbrotSet::~MandelbrotSet() {
 	delete setOnHost;
 	check(cudaFree(setOnDevice),
 		"Freed memory on device for setOnDevice",
@@ -36,7 +32,7 @@ void MandelbrotSet::fetch() {
 	check(cudaDeviceSynchronize(),
 		"Synchronized all processing units",
 		"Error occured when cudaDeviceSynchronize()",
-		LOG);
+		LOG); // not really neaded before memcpy
 
 	check(cudaMemcpy(setOnHost, setOnDevice, width * height * sizeof(Pixel), cudaMemcpyDeviceToHost),
 		"Transferred the set to the host",

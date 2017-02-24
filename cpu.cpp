@@ -95,14 +95,17 @@ int main(int argc, char *argv[])
 {
   const int width  = (argc > 1) ? std::atoi(argv[1]) : 4096;
   const int height = (argc > 2) ? std::atoi(argv[2]) : 4096;
+  const int times = (argc > 3) ? std::atoi(argv[3]) : 1;
   const double scale = 1./(width/4);
-  for (int i = 0; i < 5; i++) {
+  std::cout << "Will execute the cpu version " << times << ((times == 1) ? " time" : " times") << std::endl;
+  for (int i = 0; i < times; i++) {
 	  high_resolution_clock::time_point start = high_resolution_clock::now();
 	  run(width, height, scale);
 	  high_resolution_clock::time_point end = high_resolution_clock::now();
 	  auto elapsed = duration_cast<milliseconds> (end - start);
-	  std::cout << "Execution time: " << elapsed.count() << " miliseconds " << i << std::endl;
+	  std::cout << "Execution time for attempt [" << i << "]:" << elapsed.count() << " miliseconds " << std::endl;
   }
+  std::cout << "Press any key to exit";
   std::cin.get();
   delete [] img_data;
   delete [] row_ptrs;

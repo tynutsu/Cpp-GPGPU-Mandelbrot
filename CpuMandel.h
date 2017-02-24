@@ -1,12 +1,10 @@
 #pragma once
 #include "Util.h"
 
-
-class CpuMandel
-{
+class CpuMandel {
 	int width = 4096;
 	int height = 4096;
-	float scale = 1. / (width / 4);
+	float scale = 4.0f / width;
 	Pixel shades[TOTAL_SHADES] = {
 		{ 66,30,15 },
 		{ 25,7,26 },
